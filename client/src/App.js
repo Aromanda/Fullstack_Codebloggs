@@ -5,13 +5,10 @@ import Cookies from "js-cookie";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar";
 import RecordList from "./components/recordList";
-import Edit from "./components/edit";
 import Create from "./components/create";
 import Login from "./components/login";
 import ErrorPage from "./components/errorpage";
 import Main from "./components/main";
-import Transactions from "./components/transactions";
-import Graph from "./components/graph";
 
 const App = () => {
   const navigate = useNavigate();
@@ -55,13 +52,10 @@ const App = () => {
       <Navbar handleLogout={handleLogout} />
       <Routes>
         <Route exact path="/admin/record" element={<RecordList />} />
-        <Route path="/admin/edit/:id" element={<Edit />} />
         <Route path="/create" element={<Create />} />
         <Route path="/" element={<Login />} />
         <Route path="/error" element={<ErrorPage />} />
         <Route path="/main" element={<Main handleLogout={handleLogout} />} />
-        <Route path="/transactions" element={<Transactions />} />
-        <Route path="/graph" element={<Graph />} />
       </Routes>
     </div>
   );

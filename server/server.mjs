@@ -4,7 +4,6 @@ import session from 'express-session';
 import "./loadEnvironment.mjs";
 import records from "./db/routes/agents.mjs";
 import user from "./db/routes/session.mjs";
-import transactionRouter from './db/routes/transactions.mjs';
 import sessionRouter from './db/routes/session.mjs';
 
 
@@ -37,7 +36,6 @@ app.use((req, res, next) => {
 
 app.use("/record", records);
 app.use("/user", user);
-app.use('/', transactionRouter);
 app.use("/", sessionRouter);
 
 // start the Express server
