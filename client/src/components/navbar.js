@@ -27,7 +27,7 @@ export default function Navbar() {
       <nav className="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between">
         <div>
           <NavLink className="navbar-brand" to="/">
-            <img style={{ width: "12%" }} src="/images/rocketElevators/rocketLogo.png" alt="Logo" />
+            <img style={{ width: "12%" }} src="/images/codebloggs/codebloggs.png" alt="Logo" />
           </NavLink>
           <button
             className="navbar-toggler"
@@ -44,7 +44,7 @@ export default function Navbar() {
 
         {/* Show the agent name */}
         <div>
-          <span className="navbar-text" style={{ fontSize: '22px', color: '#0a65a0', fontStyle: 'italic' }}>
+          <span className="navbar-text" style={{ fontSize: '22px', color: '#8D88EA', fontStyle: 'italic' }}>
             Welcome, {agentName}
           </span>
         </div>

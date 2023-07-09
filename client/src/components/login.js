@@ -44,38 +44,39 @@ export default function Login() {
       }, 5000); 
     }
   };
-  
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Card style={{ width: '40rem', padding: '40px' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'black' }}>
+      <Card style={{ width: '40rem', padding: '40px', backgroundColor: '#8D88EA' }}>
+        <Card.Title style={{ color: 'black', textAlign: 'center', fontSize: '30px' }}>Login</Card.Title>
         <Card.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label style={{ fontStyle: 'italic', color: 'red', fontSize: '20px' }}>Email address</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Enter email"
+                style={{ fontStyle: 'italic', fontWeight: 'bold', textAlign: 'center' }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <Form.Text className="text-muted" style={{ fontStyle: 'italic', fontSize: '16px' }}>
-                We'll never share your email with anyone else.
-              </Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label style={{ fontStyle: 'italic', color: '#0a65a0', fontSize: '20px' }}>Password</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Password"
+                style={{ fontStyle: 'italic', fontWeight: 'bold', textAlign: 'center' }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" style={{ width: '100%', fontSize: '20px' }}>
               Submit
+            </Button>
+
+            <Button variant="link" onClick={() => navigate("/create")} style={{ display: 'block', textAlign: 'center', marginTop: '10px', color: 'red', fontSize: '20px' }}>
+              Not a member? Register now
             </Button>
           </Form>
         </Card.Body>
