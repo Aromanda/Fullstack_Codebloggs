@@ -83,9 +83,11 @@ const Create = () => {
                       id="first_name"
                       name="first_name"
                       className="form-control"
-                      placeholder="First Name"
+                      placeholder="First Name*"
+                      style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.first_name}
                       onChange={updateForm}
+                      required
                     />
                   </div>
                 </div>
@@ -96,9 +98,13 @@ const Create = () => {
                       id="email"
                       name="email"
                       className="form-control"
-                      placeholder="Email"
+                      placeholder="Email*"
+                      style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.email}
                       onChange={updateForm}
+                      pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                      title="Please enter a valid email address"
+                      required
                     />
                   </div>
                 </div>
@@ -109,9 +115,11 @@ const Create = () => {
                       id="password"
                       name="password"
                       className="form-control"
-                      placeholder="Password"
+                      placeholder="Password*"
+                      style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.password}
                       onChange={updateForm}
+                      required
                     />
                   </div>
                 </div>
@@ -122,9 +130,11 @@ const Create = () => {
                       id="location"
                       name="location"
                       className="form-control"
-                      placeholder="Location"
+                      placeholder="Location*"
+                      style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.location}
                       onChange={updateForm}
+                      required
                     />
                   </div>
                 </div>
@@ -137,9 +147,11 @@ const Create = () => {
                       id="last_name"
                       name="last_name"
                       className="form-control"
-                      placeholder="Last Name"
+                      placeholder="Last Name*"
+                      style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.last_name}
                       onChange={updateForm}
+                      required
                     />
                   </div>
                 </div>
@@ -150,9 +162,11 @@ const Create = () => {
                       id="birthdate"
                       name="birthdate"
                       className="form-control"
-                      placeholder="Birthdate"
+                      placeholder="Birthdate*"
+                      style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.birthdate}
                       onChange={updateForm}
+                      required
                     />
                   </div>
                 </div>
@@ -163,9 +177,11 @@ const Create = () => {
                       id="occupation"
                       name="occupation"
                       className="form-control"
-                      placeholder="Occupation"
+                      placeholder="Occupation*"
+                      style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.occupation}
                       onChange={updateForm}
+                      required
                     />
                   </div>
                 </div>
@@ -173,29 +189,29 @@ const Create = () => {
             </div>
             <br />
             <div className="form-group d-flex justify-content-center">
-            <Button variant="primary" type="submit" style={{ fontSize: "20px", padding: "10px 80px" }}>
-              Register
-            </Button>
-          </div>
-        </form>
-        <Modal show={showCreateModal} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Confirm Action</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Are you sure you want to register?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              No/Back
-            </Button>
-            <Button variant="primary" onClick={confirmCreate}>
-              Yes/Confirm
-            </Button>
-          </Modal.Footer>
-        </Modal>
+              <Button variant="primary" type="submit" style={{ fontSize: "20px", padding: "10px 80px" }}>
+                Register
+              </Button>
+            </div>
+          </form>
+          <Modal show={showCreateModal} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Confirm Action</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to register?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                No/Back
+              </Button>
+              <Button variant="primary" onClick={confirmCreate}>
+                Yes/Confirm
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default Create;
