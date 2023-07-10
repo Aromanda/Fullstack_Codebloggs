@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import session from 'express-session';
 import "./loadEnvironment.mjs";
-import records from "./db/routes/agents.mjs";
+import records from "./db/routes/user.mjs";
 import user from "./db/routes/session.mjs";
 import sessionRouter from './db/routes/session.mjs';
 

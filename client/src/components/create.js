@@ -18,9 +18,10 @@ const Create = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const updateForm = (e) => {
+    const { name, value } = e.target;
     setForm((prevForm) => ({
       ...prevForm,
-      [e.target.name]: e.target.value,
+      [name]: value.slice(0, 30),
     }));
   };
 
@@ -30,7 +31,7 @@ const Create = () => {
   };
 
   const confirmCreate = async () => {
-    const newPerson = { ...form };
+    const newPerson = { ...form, administration_level: "basic" };
 
     try {
       const response = await fetch("http://localhost:5050/record", {
@@ -87,6 +88,7 @@ const Create = () => {
                       style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.first_name}
                       onChange={updateForm}
+                      maxLength={30}
                       required
                     />
                   </div>
@@ -119,7 +121,7 @@ const Create = () => {
                       style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.password}
                       onChange={updateForm}
-                      required
+                      required={true}
                     />
                   </div>
                 </div>
@@ -134,6 +136,7 @@ const Create = () => {
                       style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.location}
                       onChange={updateForm}
+                      maxLength={20}
                       required
                     />
                   </div>
@@ -151,6 +154,7 @@ const Create = () => {
                       style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.last_name}
                       onChange={updateForm}
+                      maxLength={20}
                       required
                     />
                   </div>
@@ -177,10 +181,11 @@ const Create = () => {
                       id="occupation"
                       name="occupation"
                       className="form-control"
-                      placeholder="Occupation*"
+                      placeholder="Occupation"
                       style={{ fontStyle: "italic", fontWeight: "bold" }}
                       value={form.occupation}
                       onChange={updateForm}
+                      maxLength={20}
                       required
                     />
                   </div>
