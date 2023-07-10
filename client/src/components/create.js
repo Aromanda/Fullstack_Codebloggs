@@ -52,7 +52,7 @@ const Create = () => {
           location: "",
         });
         setShowCreateModal(false);
-        navigate("/admin/record");
+        navigate("/");
         alert("Registration was successful!");
       } else {
         throw new Error("Failed to register.");

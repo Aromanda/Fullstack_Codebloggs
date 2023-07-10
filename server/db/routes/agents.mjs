@@ -6,15 +6,15 @@ const router = express.Router();
 
 // This section will help you get a list of all the records.
 router.get("/", async (req, res) => {
-  let collection = await db.collection("agents");
+  let collection = await db.collection("registration");
   let results = await collection.find({}).toArray();
   res.send(results).status(200);
 });
 
 // This section will help you get a single record by id
 router.get("/:id", async (req, res) => {
-  let collection = await db.collection("agents");
-  let query = {_id: new ObjectId(req.params.id)};
+  let collection = await db.collection("registration");
+  let query = { _id: new ObjectId(req.params.id) };
   let result = await collection.findOne(query);
 
   if (!result) res.send("Not found").status(404);
@@ -27,12 +27,12 @@ router.post("/", async (req, res) => {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     email: req.body.email,
-    region: req.body.region,
-    rating: req.body.rating,
-    fee: req.body.fee,
-    sales: req.body.sales
+    birthdate: req.body.birthdate,
+    password: req.body.password,
+    occupation: req.body.occupation,
+    location: req.body.location,
   };
-  let collection = await db.collection("agents");
+  let collection = await db.collection("registration");
   let result = await collection.insertOne(newDocument);
   res.send(result).status(204);
 });
@@ -40,19 +40,19 @@ router.post("/", async (req, res) => {
 // This section will help you update a record by id.
 router.patch("/:id", async (req, res) => {
   const query = { _id: new ObjectId(req.params.id) };
-  const updates =  {
+  const updates = {
     $set: {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      region: req.body.region,
-      rating: req.body.rating,
-      fee: req.body.fee,
-      //sales: req.body.sales
-    }
+      birthdate: req.body.birthdate,
+      password: req.body.password,
+      occupation: req.body.occupation,
+      location: req.body.location,
+    },
   };
 
-  let collection = await db.collection("agents");
+  let collection = await db.collection("registration");
   let result = await collection.updateOne(query, updates);
 
   res.send(result).status(200);
@@ -62,7 +62,7 @@ router.patch("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const query = { _id: new ObjectId(req.params.id) };
 
-  const collection = db.collection("agents");
+  const collection = db.collection("registration");
   let result = await collection.deleteOne(query);
 
   res.send(result).status(200);
