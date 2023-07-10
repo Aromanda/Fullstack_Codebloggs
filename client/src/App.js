@@ -30,7 +30,7 @@ const App = () => {
   useEffect(() => {
     const checkCookie = () => {
       const token = Cookies.get('connect.sid');
-      if (!token) {
+      if (!token && !window.location.pathname.includes("/create")) {
         sessionStorage.clear();
         navigate("/");
       }

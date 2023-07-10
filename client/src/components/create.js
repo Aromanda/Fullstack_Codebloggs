@@ -9,10 +9,10 @@ const Create = () => {
     first_name: "",
     last_name: "",
     email: "",
-    region: "",
-    rating: "",
-    fee: "",
-    sales: 0,
+    birthdate: "",
+    password: "",
+    occupation: "",
+    location: "",
   });
 
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -46,20 +46,19 @@ const Create = () => {
           first_name: "",
           last_name: "",
           email: "",
-          region: "",
-          rating: "",
-          fee: "",
-          sales: 0,
+          birthdate: "",
+          password: "",
+          occupation: "",
+          location: "",
         });
         setShowCreateModal(false);
         navigate("/admin/record");
-        alert("Agent successfully created!"); // Show the alert
+        alert("Registration was successful!");
       } else {
-        throw new Error("Failed to create agent.");
+        throw new Error("Failed to register.");
       }
     } catch (error) {
       console.error("Error:", error);
-      // Handle error
     }
   };
 
@@ -68,124 +67,135 @@ const Create = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "75vh" }}>
-      <div className="card" style={{ width: "40rem" }}>
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "75vh", backgroundColor: "#000000" }}>
+      <div className="card" style={{ width: "40rem", backgroundColor: "#8D88EA" }}>
         <div className="card-body">
-          <h3 className="card-title" style={{ fontStyle: "italic", color: "red" }}>
-            Create New Agent
+          <h3 className="card-title text-center" style={{ fontStyle: "italic", color: "black" }}>
+            Registration
           </h3>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="first_name">First Name:</label>
-              <input
-                type="text"
-                id="first_name"
-                name="first_name"
-                className="form-control"
-                value={form.first_name}
-                onChange={updateForm}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="last_name">Last Name:</label>
-              <input
-                type="text"
-                id="last_name"
-                name="last_name"
-                className="form-control"
-                value={form.last_name}
-                onChange={updateForm}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="form-control"
-                value={form.email}
-                onChange={updateForm}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="region">Region:</label>
-              <input
-                type="text"
-                id="region"
-                name="region"
-                className="form-control"
-                value={form.region}
-                onChange={updateForm}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="rating">Rating:</label>
-              <input
-                type="text"
-                id="rating"
-                name="rating"
-                className="form-control"
-                value={form.rating}
-                onChange={updateForm}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="fee">Fee:</label>
-              <input
-                type="text"
-                id="fee"
-                name="fee"
-                className="form-control"
-                value={form.fee}
-                onChange={updateForm}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="sales">Sales:</label>
-              <input
-                type="number"
-                id="sales"
-                name="sales"
-                className="form-control"
-                value={form.sales}
-                onChange={updateForm}
-              />
+            <div className="row">
+              <div className="col">
+                <div className="form-group">
+                  <div className="border p-2" style={{ borderRadius: '5px' }}>
+                    <input
+                      type="text"
+                      id="first_name"
+                      name="first_name"
+                      className="form-control"
+                      placeholder="First Name"
+                      value={form.first_name}
+                      onChange={updateForm}
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="border p-2" style={{ borderRadius: '5px' }}>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="form-control"
+                      placeholder="Email"
+                      value={form.email}
+                      onChange={updateForm}
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="border p-2" style={{ borderRadius: '5px' }}>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      className="form-control"
+                      placeholder="Password"
+                      value={form.password}
+                      onChange={updateForm}
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="border p-2" style={{ borderRadius: '5px' }}>
+                    <input
+                      type="text"
+                      id="location"
+                      name="location"
+                      className="form-control"
+                      placeholder="Location"
+                      value={form.location}
+                      onChange={updateForm}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col">
+                <div className="form-group">
+                  <div className="border p-2" style={{ borderRadius: '5px' }}>
+                    <input
+                      type="text"
+                      id="last_name"
+                      name="last_name"
+                      className="form-control"
+                      placeholder="Last Name"
+                      value={form.last_name}
+                      onChange={updateForm}
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="border p-2" style={{ borderRadius: '5px' }}>
+                    <input
+                      type="date"
+                      id="birthdate"
+                      name="birthdate"
+                      className="form-control"
+                      placeholder="Birthdate"
+                      value={form.birthdate}
+                      onChange={updateForm}
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="border p-2" style={{ borderRadius: '5px' }}>
+                    <input
+                      type="text"
+                      id="occupation"
+                      name="occupation"
+                      className="form-control"
+                      placeholder="Occupation"
+                      value={form.occupation}
+                      onChange={updateForm}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
             <br />
-            <div className="form-group">
-              <Button variant="primary" type="submit">
-                Create Agent
-              </Button>
-            </div>
-          </form>
-          <Modal show={showCreateModal} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Confirm Action</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Are you sure you want to create this agent?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                No/Back
-              </Button>
-              <Button variant="primary" onClick={confirmCreate}>
-                Yes/Confirm
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          <br />
-          <button
-            onClick={() => {
-              navigate("/admin/record");
-            }}
-            className="btn btn-secondary"
-          >
-            Go back to list of agents
-          </button>
-        </div>
+            <div className="form-group d-flex justify-content-center">
+            <Button variant="primary" type="submit" style={{ fontSize: "20px", padding: "10px 80px" }}>
+              Register
+            </Button>
+          </div>
+        </form>
+        <Modal show={showCreateModal} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Action</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to register?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              No/Back
+            </Button>
+            <Button variant="primary" onClick={confirmCreate}>
+              Yes/Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default Create;
