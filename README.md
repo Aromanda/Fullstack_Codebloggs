@@ -34,56 +34,37 @@ Body	email, password	    Brève description
 ***Registration page***
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
-- Client side: POST sur /user pour créer un user dans la database Mongodb
+- Client side: pas de données.
 
-- Server side: il fait un POST pour aider à créer un nouveau record grace à un InsertOne. Il fait aussi un PATCH pour updater la db grace a UpdateOne.
-
-```
-VERBE /route/{path_param}?query_param=param_value
-
-Paramètres
-
-TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
- 
-Réponse d'exemple
-
-{
-  status:"ok",
-  data:{
-    key:value
-  },
-  message:"message descriptif"
-
-}
-```
+- Server side: pas de données.
 
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
 - Client side: 
-    - le client doit compléter les champs indiqués, et cliquer sur le bouton register. Un modal va apparaitre avec une fenetre de confirmation une fois les actions finies.
-    - Cliquer sur bouton register pour envoyer le POST
+    - POST sur /record pour créer un user dans la database Mongodb.
 
-- Server side: pas d'action. 
-
+- Server side: 
 ```
-VERBE /route/{path_param}?query_param=param_value
+POST/record
 
 Paramètres
 
-TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
+TYPE	NOM	    Description
+Body	first_name, last_name, email, birthdate, password, occupation, location	Brève description
  
 Réponse d'exemple
 
 {
   status:"ok",
   data:{
-    key:value
+    first_name: "John",
+    last_name: "Doe",
+    email: "john_doe@gmail.com",
+    birthdate: "01/01/2020",
+    password: "Codeboxx",
+    occupation: "Dev",
+    location: "Montreal",
+    auth_level: "basic"
   },
   message:"message descriptif"
 
