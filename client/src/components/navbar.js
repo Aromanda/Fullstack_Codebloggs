@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const [agentName, setAgentName] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
     async function fetchAgentData() {
@@ -22,12 +23,28 @@ export default function Navbar() {
     fetchAgentData();
   }, []);
 
+  const isLoginPage = location.pathname === "/";
+  const isCreatePage = location.pathname === "/create";
+  const isMainPage = location.pathname === "/main";
+  const isBloggsPage = location.pathname === "/bloggs";
+  const isNetworkPage = location.pathname === "/network";
+
+  let logoStyle = {
+    width: "30%", // Default logo width
+  };
+
+  if (isLoginPage || isCreatePage ) {
+    logoStyle.width = "50%"; 
+  } else if (isMainPage || isBloggsPage || isNetworkPage) {
+    logoStyle.width = "20%"; 
+  }
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between">
         <div>
           <NavLink className="navbar-brand" to="/">
-            <img style={{ width: "50%" }} src="/images/codebloggs/codebloggs logo2.png" alt="Logo" />
+            <img style={logoStyle} src="/images/codebloggs/codebloggs logo2.png" alt="Logo" />
           </NavLink>
           <button
             className="navbar-toggler"
@@ -44,7 +61,7 @@ export default function Navbar() {
 
         {/* Show the agent name */}
         <div>
-          <span className="navbar-text" style={{ fontSize: '22px', color: '#8D88EA', fontStyle: 'italic' }}>
+          <span className="navbar-text" style={{ fontSize: "22px", color: "#8D88EA", fontStyle: "italic" }}>
             Welcome, {agentName}
           </span>
         </div>

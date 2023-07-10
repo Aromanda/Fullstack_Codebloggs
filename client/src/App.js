@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar";
-import RecordList from "./components/recordList";
 import Create from "./components/create";
 import Login from "./components/login";
 import ErrorPage from "./components/errorpage";
@@ -51,7 +50,6 @@ const App = () => {
     <div>
       <Navbar handleLogout={handleLogout} />
       <Routes>
-        <Route exact path="/admin/record" element={<RecordList />} />
         <Route path="/create" element={<Create />} />
         <Route path="/" element={<Login />} />
         <Route path="/error" element={<ErrorPage />} />
