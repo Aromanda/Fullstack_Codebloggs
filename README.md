@@ -85,8 +85,8 @@ GET/user/{userID}
 
 Paramètres
 
-TYPE	NOM	Description
-Body	body_param	Brève description
+TYPE	NOM	    Description
+Body	first_name, last_name, email, birthdate, password, occupation, location	Brève description
  
 Réponse d'exemple
 
@@ -120,93 +120,66 @@ Réponse d'exemple
         - Bloggs: Navigate vers la page Bloggs view.
         - Network: Navigate vers la page Network view.
 
-- Server side: 
-
-```
-VERBE /route/{path_param}?query_param=param_value
-
-Paramètres
-
-TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
- 
-Réponse d'exemple
-
-{
-  status:"ok",
-  data:{
-    key:value
-  },
-  message:"message descriptif"
-
-}
-```
+- Server side: pas d'action.
 
 ---
 
-***Publication page***
+***Publication page (MODAL)***
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
-- Client side: création d'un POST pour générer les publications. 
+- Client side: pas de données. 
 
-- Server side: Envoie de la création de la publication vers une collection Mongodb.
-
-```
-    VERBE /route/{path_param}?query_param=param_value
-
-Paramètres
-
-TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
- 
-
-Réponse d'exemple
-
-{
-  status:"ok",
-  data:{
-    key:value
-  },
-  message:"message descriptif"
-
-}
-
-```
+- Server side: pas de données. 
 
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
 - Client side:
-    - cliquer sur le bouton "post" pour générer la publication. 
-    - Cliquer sur les autres boutons pour aller dans les autres pages ou sur le menu deroulant. 
-    - cliquer sur le bouton "post" pour générer la publication. 
-    - Cliquer sur les autres boutons pour aller dans les autres pages ou sur le menu deroulant.
+    - faire un POST sur /post.
 
-- Server side: enregistrer les publications passées dans la db Mongo.
+- Server side: 
 
 ```
-    VERBE /route/{path_param}?query_param=param_value
+    POST/post
 
 Paramètres
 
 TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
+Query	user_id	Brève description
  
 
 Réponse d'exemple
 
 {
-  status:"ok",
+    status:"ok",
   data:{
-    key:value
+    [
+        {
+            _id: ObjectID
+            content:"I am a post #1",
+            user_id: ObjectID,
+            likes: "3",
+            timestamps: "2023-05-14",
+            comment: [
+                {
+
+            _id: ObjectID,
+            content: "I am a comment #1",
+            post_id: 1,
+            user_id: 1,
+            likes: 3,
+            time_stamps: "string"
+                },
+                {
+                    ...
+                }
+                ]
+        },
+        {
+            ...
+        },
+    ]
   },
   message:"message descriptif"
-
 }
 
 ```
@@ -301,14 +274,13 @@ Réponse d'exemple
 - Server side:
 
 ```
-    VERBE /route/{path_param}?query_param=param_value
+    POST/comment/{user_id}
 
 Paramètres
 
 TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
+Query	user_id	Brève description
+
  
 
 Réponse d'exemple
@@ -316,7 +288,12 @@ Réponse d'exemple
 {
   status:"ok",
   data:{
-    key:value
+    _id: ObjectID,
+            content: "I am a comment #1",
+            post_id: 1,
+            user_id: 1,
+            likes: 3,
+            time_stamps: "string"
   },
   message:"message descriptif"
 
@@ -329,48 +306,72 @@ Réponse d'exemple
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
 - Client side: 
+    - GET pour avoir toutes les publications.
 
 - Server side: 
 
 ```
-    VERBE /route/{path_param}?query_param=param_value
+    GET/post/{user_id}
 
 Paramètres
 
 TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
+Query	user_id	Brève description
  
 
 Réponse d'exemple
 
 {
-  status:"ok",
+    status:"ok",
   data:{
-    key:value
+    [
+        {
+            _id: ObjectID
+            content:"I am a post #1",
+            user_id: ObjectID,
+            likes: "3",
+            timestamps: "2023-05-14",
+            comment: [
+                {
+
+            _id: ObjectID,
+            content: "I am a comment #1",
+            post_id: 1,
+            user_id: 1,
+            likes: 3,
+            time_stamps: "string"
+                },
+                {
+                    ...
+                }
+                ]
+        },
+        {
+            ...
+        },
+    ]
   },
   message:"message descriptif"
-
 }
 
 ```
 
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
-- Client side:
+- Client side: 
+    - POST pour créer un "like".
+    - POST au comment Endpoint qui est relié à son POST _id.
 
 - Server side:
 
 ```
-    VERBE /route/{path_param}?query_param=param_value
+    POST/comment/{user_id}
 
 Paramètres
 
 TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
+Query	user_id	Brève description
+
  
 
 Réponse d'exemple
@@ -378,7 +379,12 @@ Réponse d'exemple
 {
   status:"ok",
   data:{
-    key:value
+    _id: ObjectID,
+            content: "I am a comment #1",
+            post_id: 1,
+            user_id: 1,
+            likes: 3,
+            time_stamps: "string"
   },
   message:"message descriptif"
 
@@ -391,18 +397,17 @@ Réponse d'exemple
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
 - Client side:
+    - GET sur /user 
 
 - Server side:
 
 ```
-    VERBE /route/{path_param}?query_param=param_value
+    GET /user
 
 Paramètres
 
 TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
+Body	user_id	Brève description
  
 
 Réponse d'exemple
@@ -410,7 +415,14 @@ Réponse d'exemple
 {
   status:"ok",
   data:{
-    key:value
+    first_name: "John",
+    last_name: "Doe",
+    email: "john_doe@gmail.com",
+    birthdate: "01/01/2020",
+    password: "Codeboxx",
+    occupation: "Dev",
+    location: "Montreal",
+    auth_level: "basic"
   },
   message:"message descriptif"
 
@@ -421,18 +433,17 @@ Réponse d'exemple
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
 - Client side:
+    - GET sur /user
 
 - Server side:
 
 ```
-    VERBE /route/{path_param}?query_param=param_value
+    GET/user/{user_id}
 
 Paramètres
 
-TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
+TYPE	NOM	    Description
+Body	user_id	Brève description
  
 
 Réponse d'exemple
@@ -440,7 +451,14 @@ Réponse d'exemple
 {
   status:"ok",
   data:{
-    key:value
+    first_name: "John",
+    last_name: "Doe",
+    email: "john_doe@gmail.com",
+    birthdate: "01/01/2020",
+    password: "Codeboxx",
+    occupation: "Dev",
+    location: "Montreal",
+    auth_level: "basic"
   },
   message:"message descriptif"
 
@@ -453,18 +471,16 @@ Réponse d'exemple
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
 
-- Client side:
+- Client side: 
+    - GET sur /admin pour vérifier si user a l'authentification.
 
-- Server side:
+- Server side: 
 
 ```
-    VERBE /route/{path_param}?query_param=param_value
-
+    GET /admin
 Paramètres
 
 TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
 Body	body_param	Brève description
  
 
@@ -473,7 +489,7 @@ Réponse d'exemple
 {
   status:"ok",
   data:{
-    key:value
+    email:"valid"
   },
   message:"message descriptif"
 
@@ -483,9 +499,9 @@ Réponse d'exemple
 
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
-- Client side:
+- Client side: Alert box. 
 
-- Server side:
+- Server side: pas d'action
 
 ```
     VERBE /route/{path_param}?query_param=param_value
