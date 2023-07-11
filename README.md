@@ -76,18 +76,16 @@ Réponse d'exemple
 ***Main page***
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
-- Client side: Faire un Fetch pour passer en revue la liste des users pour afficher son profil.
+- Client side: Faire un GET pour passer en revue la liste des users pour afficher son profil.
 
-- Server side: pas de données requises. 
+- Server side:
 
 ```
-VERBE /route/{path_param}?query_param=param_value
+GET/user/{userID}
 
 Paramètres
 
 TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
 Body	body_param	Brève description
  
 Réponse d'exemple
@@ -95,7 +93,15 @@ Réponse d'exemple
 {
   status:"ok",
   data:{
-    key:value
+   first_name: "John",
+    last_name: "Doe", 
+    birthday: "01/01/2020", 
+    email: "john_doe@gmail.com", 
+    password: "Codeboxx", 
+    status: "je suis content", 
+    location: "Montreal", 
+    occupation: "Dev", 
+    auth_level: "basic"
   },
   message:"message descriptif"
 
@@ -105,10 +111,16 @@ Réponse d'exemple
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
 - Client side: 
-    - création dropdown pour afficher paramètre du compte et deconnexion. Cliquer sur les boutons pour nous rediriger vers les autres pages.
-    - création dropdown pour afficher paramètre du compte et deconnexion. Cliquer sur les boutons pour nous rediriger vers les autres pages.
+    - Dropdown button: 
+        - pour afficher paramètre du compte (ALERT).
+        - faire un POST sur le bouton deconnexion.
 
-- Server side: pas d'action.
+    - Sidebar:
+        - Home: main page.
+        - Bloggs: Navigate vers la page Bloggs view.
+        - Network: Navigate vers la page Network view.
+
+- Server side: 
 
 ```
 VERBE /route/{path_param}?query_param=param_value
