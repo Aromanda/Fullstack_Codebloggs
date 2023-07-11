@@ -7,6 +7,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  last_name: {
+    type: String,
+    required: true
+  },
   birthday: {
     type: Date,
     required: true
@@ -22,6 +26,7 @@ const userSchema = new Schema({
   },
   status: {
     type: String,
+    default:"",
     required: true
   },
   location: {
@@ -34,6 +39,7 @@ const userSchema = new Schema({
   },
   auth_level: {
     type: String,
+    default:"basic",
     required: true
   }
 });

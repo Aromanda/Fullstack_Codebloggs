@@ -8,11 +8,13 @@ const Create = () => {
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
+    birthday: "",
     email: "",
-    birthdate: "",
     password: "",
-    occupation: "",
+    status: "",
     location: "",
+    occupation: "",
+    auth_level: ""
   });
 
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -31,26 +33,28 @@ const Create = () => {
   };
 
   const confirmCreate = async () => {
-    const newPerson = { ...form, administration_level: "basic" };
-
+    const newPerson = { ...form};
+  console.log(newPerson)
     try {
-      const response = await fetch("http://localhost:5050/record", {
+      const response = await fetch("http://localhost:5050/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newPerson),
       });
-
+    console.log(response.ok)
       if (response.ok) {
         setForm({
           first_name: "",
           last_name: "",
+          birthday: "",
           email: "",
-          birthdate: "",
           password: "",
-          occupation: "",
+          status: "",
           location: "",
+          occupation: "",
+          auth_level: ""
         });
         setShowCreateModal(false);
         navigate("/");
@@ -186,6 +190,22 @@ const Create = () => {
                       value={form.occupation}
                       onChange={updateForm}
                       maxLength={20}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="border p-2" style={{ borderRadius: '5px' }}>
+                    <input
+                      type="status"
+                      id="status"
+                      name="status"
+                      className="form-control"
+                      placeholder="Status*"
+                      style={{ fontStyle: "italic", fontWeight: "bold" }}
+                      value={form.status}
+                      onChange={updateForm}
+                      title=""
                       required
                     />
                   </div>

@@ -39,6 +39,7 @@ export default function MyNavbar() {
   }
 
   async function handleSubmitPost() {
+    console.log(newPostContent)
     try {
       const response = await fetch("http://localhost:5050/post", {
         method: "POST",

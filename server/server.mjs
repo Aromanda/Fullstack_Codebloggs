@@ -2,10 +2,9 @@ import express from "express";
 import cors from "cors";
 import session from 'express-session';
 import "./loadEnvironment.mjs";
-import records from "./db/routes/user.mjs";
-import user from "./db/routes/session.mjs";
+import userRouter from "./db/routes/user.mjs";
 import sessionRouter from './db/routes/session.mjs';
-import postRouter from './db/routes/post.mjs'; // Import the post router
+import postRouter from './db/routes/post.mjs';
 
 const PORT = process.env.PORT || 5050;
 const app = express();
@@ -34,8 +33,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/record", records);
-app.use("/user", user);
+app.use("/user", userRouter);
 app.use("/", sessionRouter);
 
 // Register the post router at the /post route

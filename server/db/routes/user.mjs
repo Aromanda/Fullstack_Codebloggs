@@ -1,6 +1,7 @@
 import express from "express";
 import db from "../conn.mjs";
 import { ObjectId } from "mongodb";
+import UserSchemas from "../schemas/user.schemas.mjs";
 
 const router = express.Router();
 
@@ -23,15 +24,8 @@ router.get("/:id", async (req, res) => {
 
 // This section will help you create a new record.
 router.post("/", async (req, res) => {
-  let newDocument = {
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    email: req.body.email,
-    birthdate: req.body.birthdate,
-    password: req.body.password,
-    occupation: req.body.occupation,
-    location: req.body.location,
-  };
+  let newDocument = new UserSchemas (req.body)
+ console.log(newDocument)
   let collection = await db.collection("user");
   let result = await collection.insertOne(newDocument);
   res.send(result).status(204);
