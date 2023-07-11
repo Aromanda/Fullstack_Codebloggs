@@ -14,7 +14,7 @@ const Create = () => {
     status: "",
     location: "",
     occupation: "",
-    auth_level: ""
+    auth_level: "basic"
   });
 
   const [showCreateModal, setShowCreateModal] = useState(false);

@@ -12,7 +12,7 @@ export default function MyNavbar() {
 
   useEffect(() => {
     async function fetchAgentData() {
-      const response = await fetch("http://localhost:5050/record/");
+      const response = await fetch("http://localhost:5050/user/");
       if (response.ok) {
         const records = await response.json();
         const email = sessionStorage.getItem("email");
