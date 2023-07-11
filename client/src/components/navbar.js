@@ -32,14 +32,35 @@ export default function MyNavbar() {
   const handlePostContentChange = (event) => setNewPostContent(event.target.value);
 
   async function handleLogout() {
-    await fetch('http://localhost:5050/logout', { method: 'POST', credentials: 'include' });
+    await fetch("http://localhost:5050/logout", { method: "POST", credentials: "include" });
     sessionStorage.clear();
-    document.cookie = 'connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    navigate('/');
+    document.cookie = "connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    navigate("/");
   }
 
   async function handleSubmitPost() {
-    // Handle the submission of the new post here
+    try {
+      const response = await fetch("http://localhost:5050/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: newPostContent }),
+      });
+
+      if (response.ok) {
+        // Handle the successful submission of the new post here
+        // For example, you can display a success message or update the UI
+        console.log("Post submitted successfully");
+      } else {
+        // Handle the error response if the post submission fails
+        console.log("Error submitting the post");
+      }
+    } catch (error) {
+      // Handle any network or server errors
+      console.log("Error submitting the post:", error);
+    }
+
     // After submitting, close the modal and clear the post content
     handleModalClose();
     setNewPostContent("");
@@ -52,13 +73,13 @@ export default function MyNavbar() {
   const isNetworkPage = location.pathname === "/network";
 
   let logoStyle = {
-    width: "30%", 
+    width: "30%",
   };
 
   if (isLoginPage || isCreatePage) {
-    logoStyle.width = "50%"; 
+    logoStyle.width = "50%";
   } else if (isMainPage || isBloggsPage || isNetworkPage) {
-    logoStyle.width = "40%"; 
+    logoStyle.width = "40%";
   }
 
   const postButtonStyle = {
@@ -66,16 +87,16 @@ export default function MyNavbar() {
     color: "white",
     fontSize: "20px",
     padding: "10px 120px",
-    marginRight: "auto"
+    marginRight: "auto",
   };
 
   const modalContainerStyle = {
-    backgroundColor: "#f8f9fa" // Set the desired container color here
+    backgroundColor: "#f8f9fa", // Set the desired container color here
   };
 
   const submitButtonStyle = {
     backgroundColor: "black",
-    color: "white"
+    color: "white",
   };
 
   return (
@@ -89,11 +110,17 @@ export default function MyNavbar() {
         </Button>
         {!(location.pathname === "/" || location.pathname === "/create") && (
           <Dropdown alignRight>
-            <Dropdown.Toggle 
+            <Dropdown.Toggle
               variant="secondary"
-              id="dropdown-basic" 
+              id="dropdown-basic"
               className="btn"
-              style={{ backgroundColor: 'black', color: 'white', fontWeight: 'bold', fontStyle: 'italic', borderRadius: '5px' }}
+              style={{
+                backgroundColor: "black",
+                color: "white",
+                fontWeight: "bold",
+                fontStyle: "italic",
+                borderRadius: "5px",
+              }}
             >
               {agentName} <i className="fas fa-caret-down"></i>
             </Dropdown.Toggle>
@@ -103,9 +130,7 @@ export default function MyNavbar() {
                 Account Settings
               </Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={handleLogout}>
-                Logout
-              </Dropdown.Item>
+              <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         )}
@@ -114,12 +139,7 @@ export default function MyNavbar() {
             <Modal.Title>Blog something</Modal.Title>
           </Modal.Header>
           <Modal.Body style={modalContainerStyle}>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={newPostContent}
-              onChange={handlePostContentChange}
-            />
+            <Form.Control as="textarea" rows={3} value={newPostContent} onChange={handlePostContentChange} />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleModalClose}>

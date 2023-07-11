@@ -5,7 +5,7 @@ import "./loadEnvironment.mjs";
 import records from "./db/routes/user.mjs";
 import user from "./db/routes/session.mjs";
 import sessionRouter from './db/routes/session.mjs';
-
+import postRouter from './db/routes/post.mjs'; // Import the post router
 
 const PORT = process.env.PORT || 5050;
 const app = express();
@@ -38,7 +38,10 @@ app.use("/record", records);
 app.use("/user", user);
 app.use("/", sessionRouter);
 
-// start the Express server
+// Register the post router at the /post route
+app.use("/post", postRouter);
+
+// Start the Express server
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
