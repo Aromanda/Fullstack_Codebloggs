@@ -6,7 +6,10 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar";
 import Create from "./components/create";
 import Login from "./components/login";
-import Main from "./components/main";
+import Home from "./components/home";
+import Bloggs from "./components/bloggs"
+import Admin from "./components/admin"
+import Network from "./components/network"
 
 const App = () => {
   const navigate = useNavigate();
@@ -51,7 +54,10 @@ const App = () => {
       <Routes>
         <Route path="/create" element={<Create />} />
         <Route path="/" element={<Login />} />
-        <Route path="/main" element={<Main handleLogout={handleLogout} />} />
+        <Route path="/home" element={<Home handleLogout={handleLogout} />} />
+        <Route path="/bloggs" element={<Bloggs />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/network" element={<Network />} />
       </Routes>
     </div>
   );

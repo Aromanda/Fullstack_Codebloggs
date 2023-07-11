@@ -33,7 +33,7 @@ export default function Login() {
       toast.success("Logged in successfully!");
 
       setTimeout(() => {
-        navigate("/main");
+        navigate("/home");
       }, 5000); 
     } catch (error) {
       console.error(error);
