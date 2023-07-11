@@ -25,7 +25,7 @@ Body	email, password	    Brève description
   status:"ok",
   data:{
     email: "John_Doe@gmail.com",
-    password: "Codeboxx"
+    password: "Codeboxx",
   },
   message:"message descriptif"
 }
@@ -522,7 +522,7 @@ Réponse d'exemple
 {
   status:"ok",
   data:{
-    key:value
+    key:value,
   },
   message:"message descriptif"
 
