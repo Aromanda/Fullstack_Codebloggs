@@ -28,7 +28,7 @@ Body	email, password	    Brève description
   message:"message descriptif"
 }
 ```
-
+ 
 ---
 
 ***Registration page***
