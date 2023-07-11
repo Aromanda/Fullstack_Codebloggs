@@ -2,6 +2,7 @@ import express from "express";
 import db from "../conn.mjs";
 import { ObjectId } from "mongodb";
 import cookieParser from 'cookie-parser';
+import sessionSchema from "../schemas/session.schemas.mjs";
 
 const router = express.Router();
 router.use(cookieParser());

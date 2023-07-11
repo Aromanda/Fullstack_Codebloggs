@@ -2,6 +2,7 @@ import express from "express";
 import db from "../conn.mjs";
 import cors from "cors";
 import { ObjectId } from "mongodb";
+import PostSchema from "../schemas/post.schemas.mjs";
 
 const router = express.Router();
 router.use(cors());

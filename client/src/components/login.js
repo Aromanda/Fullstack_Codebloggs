@@ -38,10 +38,6 @@ export default function Login() {
     } catch (error) {
       console.error(error);
       toast.error(error.message);
-
-      setTimeout(() => {
-        navigate("/error");
-      }, 5000); 
     }
   };
 
