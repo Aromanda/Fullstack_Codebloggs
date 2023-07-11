@@ -6,7 +6,6 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar";
 import Create from "./components/create";
 import Login from "./components/login";
-import ErrorPage from "./components/errorpage";
 import Main from "./components/main";
 
 const App = () => {
@@ -52,7 +51,6 @@ const App = () => {
       <Routes>
         <Route path="/create" element={<Create />} />
         <Route path="/" element={<Login />} />
-        <Route path="/error" element={<ErrorPage />} />
         <Route path="/main" element={<Main handleLogout={handleLogout} />} />
       </Routes>
     </div>

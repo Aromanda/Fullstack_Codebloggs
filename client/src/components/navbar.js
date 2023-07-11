@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Nav, Navbar, Dropdown, Image } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import { NavLink, useLocation } from "react-router-dom";
 
-export default function Navbar() {
+export default function MyNavbar() {
   const [agentName, setAgentName] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchAgentData() {
       const response = await fetch("http://localhost:5050/record/");
       if (response.ok) {
         const records = await response.json();
-        // Assuming the email stored in session storage is unique and can be used to identify the agent
         const email = sessionStorage.getItem("email");
         const agent = records.find((record) => record.email === email);
         if (agent) {
@@ -23,55 +24,64 @@ export default function Navbar() {
     fetchAgentData();
   }, []);
 
-  const isLoginPage = location.pathname === "/";
+  async function handleLogout() {
+    await fetch('http://localhost:5050/logout', { method: 'POST', credentials: 'include' });
+    sessionStorage.clear();
+    document.cookie = 'connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    navigate('/');
+  }
+
+  const isLoginPage = location.pathname === "/login";
   const isCreatePage = location.pathname === "/create";
   const isMainPage = location.pathname === "/main";
   const isBloggsPage = location.pathname === "/bloggs";
   const isNetworkPage = location.pathname === "/network";
 
   let logoStyle = {
-    width: "30%", // Default logo width
+    width: "30%", 
   };
 
   if (isLoginPage || isCreatePage ) {
     logoStyle.width = "50%"; 
   } else if (isMainPage || isBloggsPage || isNetworkPage) {
-    logoStyle.width = "20%"; 
+    logoStyle.width = "40%"; 
   }
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between">
-        <div>
-          <NavLink className="navbar-brand" to="/">
-            <img style={logoStyle} src="/images/codebloggs/codebloggs logo2.png" alt="Logo" />
-          </NavLink>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-        </div>
+      <Navbar expand="lg" bg="light" variant="light">
+        <Navbar.Brand as={NavLink} to="/">
+          <Image style={logoStyle} src="/images/codebloggs/codebloggs logo2.png" alt="Logo" />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            {/* Other Nav links here */}
+          </Nav>
+        </Navbar.Collapse>
+        {!(location.pathname === "/" || location.pathname === "/create") && (
+          <Dropdown alignRight>
+            <Dropdown.Toggle 
+              variant="secondary"
+              id="dropdown-basic" 
+              className="btn"
+              style={{ backgroundColor: 'black', color: 'white', fontWeight: 'bold', fontStyle: 'italic', borderRadius: '5px' }}
+            >
+              {agentName} <i className="fas fa-caret-down"></i>
+            </Dropdown.Toggle>
 
-        {/* Show the agent name */}
-        <div>
-          <span className="navbar-text" style={{ fontSize: "22px", color: "#8D88EA", fontStyle: "italic" }}>
-            Welcome, {agentName}
-          </span>
-        </div>
-
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ml-auto">
-            {/* Removed the code block for the "Create an agent" button */}
-          </ul>
-        </div>
-      </nav>
+            <Dropdown.Menu>
+              <Dropdown.Item as={NavLink} to="/account-settings">
+                Account Settings
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={handleLogout}>
+                Logout
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
+      </Navbar>
     </div>
   );
 }
