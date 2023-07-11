@@ -2,7 +2,11 @@ import express from "express";
 import db from "../conn.mjs";
 import cors from "cors";
 import { ObjectId } from "mongodb";
+<<<<<<< HEAD
 import PostSchema from "../schemas/post.schemas.mjs";
+=======
+import PostSchemas from "../schemas/post.schemas.mjs";
+>>>>>>> 1b65f8aef2e447d9f9e7da08a08953c20a660274
 
 const router = express.Router();
 router.use(cors());
@@ -12,29 +16,28 @@ const collection = db.collection("post");
 // Create a new post
 router.post("/", async (req, res) => {
   try {
-    const { content, user_id, likes, comment } = req.body;
-
     // Create a new post object
-    const newPost = {
-      content,
-      user_id: new ObjectId(user_id),
-      likes,
-      comment,
-      timestamps: new Date(),
-    };
+    const newPost = new PostSchemas(req.body)
 
     // Insert the new post into the database
     const result = await collection.insertOne(newPost);
+      res.status(201).json({ message: "Post created successfully", post: result });
 
-    if (result.insertedCount === 1) {
-      const insertedPost = result.ops[0];
-      res.status(201).json({ message: "Post created successfully", post: insertedPost });
-    } else {
-      res.status(500).json({ error: "Failed to create the post" });
-    }
   } catch (error) {
     console.error("Error creating the post:", error);
     res.status(500).json({ error: "Failed to create the post" });
+  }
+});
+
+// Get all posts
+router.get("/", async (req, res) => {
+  try {
+    let collection = await db.collection("post");
+  let results = await collection.find({}).toArray();
+    res.status(200).json(results);
+  } catch (error) {
+    console.error("Error getting the posts:", error);
+    res.status(500).json({ error: "Failed to get the posts" });
   }
 });
 

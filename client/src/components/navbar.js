@@ -50,19 +50,14 @@ export default function MyNavbar() {
       });
 
       if (response.ok) {
-        // Handle the successful submission of the new post here
-        // For example, you can display a success message or update the UI
         console.log("Post submitted successfully");
       } else {
-        // Handle the error response if the post submission fails
         console.log("Error submitting the post");
       }
     } catch (error) {
-      // Handle any network or server errors
       console.log("Error submitting the post:", error);
     }
 
-    // After submitting, close the modal and clear the post content
     handleModalClose();
     setNewPostContent("");
   }
@@ -92,7 +87,7 @@ export default function MyNavbar() {
   };
 
   const modalContainerStyle = {
-    backgroundColor: "#f8f9fa", // Set the desired container color here
+    backgroundColor: "#f8f9fa",
   };
 
   const submitButtonStyle = {
@@ -106,9 +101,11 @@ export default function MyNavbar() {
         <Navbar.Brand as={NavLink} to="/">
           <Image style={logoStyle} src="/images/codebloggs/codebloggs logo2.png" alt="Logo" />
         </Navbar.Brand>
-        <Button style={postButtonStyle} onClick={handleModalOpen}>
-          Post
-        </Button>
+        {!(location.pathname === "/" || location.pathname === "/create") && (
+          <Button style={postButtonStyle} onClick={handleModalOpen}>
+            Post
+          </Button>
+        )}
         {!(location.pathname === "/" || location.pathname === "/create") && (
           <Dropdown alignRight>
             <Dropdown.Toggle
