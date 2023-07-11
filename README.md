@@ -13,7 +13,7 @@
 - Server side: 
 ```
     POST/session
-
+ 
 Paramètres
 
 TYPE	NOM	                Description
