@@ -10,8 +10,10 @@ const PORT = process.env.PORT || 5050;
 const app = express();
 
 // Set up CORS to accept credentials
-app.use(cors());
-
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
 app.use(express.json());
 
 // Add express-session middleware
