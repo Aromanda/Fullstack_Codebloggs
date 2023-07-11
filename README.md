@@ -8,7 +8,9 @@
 
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
     
-- Client side: submit login form afin de valider email et password. 
+- Client side: 
+  - submit login form afin de valider email et password. 
+  - link qui emmene à la page register
 
 - Server side: 
 ```
@@ -41,11 +43,11 @@ Body	email, password	    Brève description
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
 - Client side: 
-    - POST sur /record pour créer un user dans la database Mongodb.
+    - POST sur /user pour créer un user dans la database Mongodb.
 
 - Server side: 
 ```
-POST/record
+POST/user
 
 Paramètres
 
@@ -62,6 +64,7 @@ Réponse d'exemple
     email: "john_doe@gmail.com",
     birthdate: "01/01/2020",
     password: "Codeboxx",
+    status:"il fait beau dehors",
     occupation: "Dev",
     location: "Montreal",
     auth_level: "basic"
@@ -76,7 +79,7 @@ Réponse d'exemple
 ***Main page***
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
-- Client side: Faire un GET pour passer en revue la liste des users pour afficher son profil.
+- Client side: pas de données.
 
 - Server side:
 
@@ -86,7 +89,7 @@ GET/user/{userID}
 Paramètres
 
 TYPE	NOM	    Description
-Body	first_name, last_name, email, birthdate, password, occupation, location	Brève description
+Query	user_id Brève description
  
 Réponse d'exemple
 
@@ -144,7 +147,7 @@ Réponse d'exemple
 Paramètres
 
 TYPE	NOM	Description
-Query	user_id	Brève description
+Body	user_id, content	Brève description
  
 
 Réponse d'exemple
@@ -154,7 +157,7 @@ Réponse d'exemple
   data:{
     [
         {
-            _id: ObjectID
+            _id: ObjectID,
             content:"I am a post #1",
             user_id: ObjectID,
             likes: "3",
@@ -235,7 +238,7 @@ Réponse d'exemple
   data:{
     [
         {
-            _id: ObjectID
+            _id: ObjectID,
             content:"I am a post #1",
             user_id: ObjectID,
             likes: "3",
@@ -326,7 +329,7 @@ Réponse d'exemple
   data:{
     [
         {
-            _id: ObjectID
+            _id: ObjectID,
             content:"I am a post #1",
             user_id: ObjectID,
             likes: "3",
