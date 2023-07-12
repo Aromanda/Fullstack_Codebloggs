@@ -1,26 +1,37 @@
-// Import the necessary modules
-import mongoose from 'mongoose';
-// import { NUMBER } from 'sequelize';
 
-const { Schema } = mongoose;
-
-// Define the Comment schema
+import mongoose, { Schema } from 'mongoose';
 const CommentSchema = new Schema({
-  content: String,
-  post_id: { 
-    type: Schema.Types.ObjectId, 
-    ref: "Post"
+  user_id: {
+    type: Schema.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
   },
-  user_id: { 
-    type: Schema.Types.ObjectId, 
-    ref: "User" 
+  post_id: {
+    type: Schema.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
   },
   likes: {
     type: Number,
-    default:0
+    default: 0,
   },
-  timestamp: String,
+  time_stamp: {
+    type: Date,
+    default: Date.now,
+  },
+  content: {
+    type: String,
+    required: true,
+  },
 });
-
-// Export the Comment schema
 export default mongoose.model('Comment', CommentSchema);
+
+
+
+
+
+
+
+
+
+
+
+

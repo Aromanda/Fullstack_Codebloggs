@@ -7,9 +7,9 @@ import Navbar from "./components/navbar";
 import Create from "./components/create";
 import Login from "./components/login";
 import Home from "./components/home";
-import Bloggs from "./components/bloggs"
-import Admin from "./components/admin"
-import Network from "./components/network"
+import Bloggs from "./components/bloggs";
+import Admin from "./components/admin";
+import Network from "./components/network";
 
 const App = () => {
   const navigate = useNavigate();

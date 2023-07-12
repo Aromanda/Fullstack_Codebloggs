@@ -2,11 +2,7 @@ import express from "express";
 import db from "../conn.mjs";
 import cors from "cors";
 import { ObjectId } from "mongodb";
-<<<<<<< HEAD
 import PostSchema from "../schemas/post.schemas.mjs";
-=======
-import PostSchemas from "../schemas/post.schemas.mjs";
->>>>>>> 1b65f8aef2e447d9f9e7da08a08953c20a660274
 
 const router = express.Router();
 router.use(cors());
@@ -17,11 +13,11 @@ const collection = db.collection("post");
 router.post("/", async (req, res) => {
   try {
     // Create a new post object
-    const newPost = new PostSchemas(req.body)
+    const newPost = new PostSchema(req.body);
 
     // Insert the new post into the database
     const result = await collection.insertOne(newPost);
-      res.status(201).json({ message: "Post created successfully", post: result });
+    res.status(201).json({ message: "Post created successfully", post: result.ops[0] });
 
   } catch (error) {
     console.error("Error creating the post:", error);
@@ -32,8 +28,7 @@ router.post("/", async (req, res) => {
 // Get all posts
 router.get("/", async (req, res) => {
   try {
-    let collection = await db.collection("post");
-  let results = await collection.find({}).toArray();
+    const results = await collection.find({}).toArray();
     res.status(200).json(results);
   } catch (error) {
     console.error("Error getting the posts:", error);
