@@ -15,14 +15,14 @@ router.get("/", async (req, res) => {
 });
 
 // This section will help you get a single user by id
-router.get("/:id", async (req, res) => {
-  let collection = await db.collection("user");
-  let query = {_id: new ObjectId(req.params.id)};
-  let result = await collection.findOne(query);
-
-  if (!result) res.send("Not found").status(404);
-  else res.send(result).status(200);
-});
+// router.get("/:id", async (req, res) => {
+//   let collection = await db.collection("user");
+//   let query = {_id: new ObjectId(req.params.id)};
+//   let result = await collection.findOne(query);
+//
+//   if (!result) res.send("Not found").status(404);
+//   else res.send(result).status(200);
+// });
 
 router.post("/session", async (req, res) => {
   try {
@@ -62,7 +62,7 @@ router.post("/session", async (req, res) => {
         if (insertResult.insertedCount === 1) {
           const insertedDocumentId = insertResult.insertedId;
           const retrievedDocument = await db.collection('session').findOne({ _id: insertedDocumentId });
-          console.log(retrievedDocument);
+          // console.log(retrievedDocument);
         }
       } catch (e) {
         console.error(e);
@@ -83,26 +83,30 @@ router.post("/session", async (req, res) => {
 router.get('/validate_token', async (req, res) => {
   const token = req.query.token;
   console.log('Token:', token);
-  const objectIdFromToken = token.split('_')[0];
-  console.log('objectIdFromToken:', objectIdFromToken);
+  // const objectIdFromToken = token.split('_')[0];
+  // console.log('objectIdFromToken:', objectIdFromToken);
 
   let collection = await db.collection('session');
 
-  if (!ObjectId.isValid(objectIdFromToken)) {
-      res.status(400).json({ error: 'Invalid token format.' });
-      return;
-  }
+  // if (!ObjectId.isValid(objectIdFromToken)) {
+  //     res.status(400).json({ error: 'Invalid token format.' });
+  //     return;
+  // }
   
-  let query = { userId: new ObjectId(objectIdFromToken), cookie: token };
-  console.log('Query:', query);
+  // let query = { userId: new ObjectId(objectIdFromToken), cookie: token };
+  let query = { cookie: token };
+  // console.log('Query:', query);
 
   let result = await collection.findOne(query);
-  console.log('Result:', result);
+  // console.log('Result:', result);
+
+  // console.log(`result`)
+  // console.log(result)
 
   if (!result) {
       res.status(404).json({ error: 'Token not found.' });
   } else {
-      res.status(200).json({ message: 'Token is valid.' });
+      res.status(200).json({ message: 'Token is valid.', userId: result.userId, email: result.email });
   }
 });
 
@@ -124,13 +128,13 @@ router.patch("/:id", async (req, res) => {
 });
 
 // This section will help you delete a user
-router.delete("/:id", async (req, res) => {
-  const query = { _id: new ObjectId(req.params.id) };
-
-  const collection = db.collection("user");
-  let result = await collection.deleteOne(query);
-
-  res.send(result).status(200);
-});
+// router.delete("/:id", async (req, res) => {
+//   const query = { _id: new ObjectId(req.params.id) };
+//
+//   const collection = db.collection("user");
+//   let result = await collection.deleteOne(query);
+//
+//   res.send(result).status(200);
+// });
 
 export default router;
