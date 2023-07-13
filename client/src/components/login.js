@@ -27,10 +27,10 @@ export default function Login() {
       }
   
       const data = await response.json();
-  
+
       console.log(data); // This should now include the userId
       sessionStorage.setItem('email', email);
-      sessionStorage.setItem('userId', data.userId); // Sets the user_id in sessionStorage
+      sessionStorage.setItem('token', data.data.token); // Sets the user_id in sessionStorage
       toast.success("Logged in successfully!");
   
       setTimeout(() => {
