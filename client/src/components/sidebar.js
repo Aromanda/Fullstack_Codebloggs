@@ -17,6 +17,7 @@ function Sidebar() {
         <Link to="/home" style={linkStyle}>Home</Link>
         <Link to="/bloggs" style={linkStyle}>Bloggs</Link>
         <Link to="/network" style={linkStyle}>Network</Link>
+        <Link to="/admin" style={linkStyle}>Admin</Link>
       </Nav>
     </Navbar>
   );
