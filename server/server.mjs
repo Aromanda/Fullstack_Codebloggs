@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/user", userRouter);
-app.use("/", sessionRouter);
+app.use("/session", sessionRouter);
 
 // Register the post router at the /post route
 app.use("/post", postRouter);

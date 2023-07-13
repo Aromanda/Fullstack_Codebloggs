@@ -3,13 +3,13 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Navbar, Dropdown, Button, Modal, Form, Image } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 
+
 export default function MyNavbar() {
   const [agentName, setAgentName] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [newPostContent, setNewPostContent] = useState("");
-
   useEffect(() => {
     async function fetchAgentData() {
       const response = await fetch("http://localhost:5050/user/");
@@ -18,8 +18,9 @@ export default function MyNavbar() {
         const email = sessionStorage.getItem("email");
         const agent = records.find((record) => record.email === email);
         if (agent) {
-          const { first_name, last_name } = agent;
+          const { first_name, last_name, user_id } = agent;
           setAgentName(`${first_name} ${last_name}`);
+          sessionStorage.setItem("user_id", user_id);
         }
       }
     }

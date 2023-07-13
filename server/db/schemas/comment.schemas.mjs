@@ -1,15 +1,29 @@
-// Import the necessary modules
-import { Schema } from 'mongoose';
 
-// Define the Comment schema
+import mongoose, { Schema } from 'mongoose';
 const CommentSchema = new Schema({
-  _id: Schema.Types.ObjectId,
-  content: String,
-  post_id: { type: Schema.Types.ObjectId, ref: 'Post' },
-  user_id: { type: Schema.Types.ObjectId, ref: 'User' },
-  like: Number,
-  timestamp: String,
+  user_id: {
+    type: Schema.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
+  },
+  post_id: {
+    type: Schema.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
+  },
+  likes: {
+    type: Number,
+    default: 0,
+  },
+  time_stamp: {
+    type: Date,
+    default: Date.now,
+  },
+  content: {
+    type: String,
+    required: true,
+  },
 });
+export default mongoose.model('Comment', CommentSchema);
 
-// Export the Comment schema
-export default CommentSchema;
+
+
+

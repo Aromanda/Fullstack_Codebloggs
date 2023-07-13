@@ -12,7 +12,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5050/session/", {
+      const response = await fetch("http://localhost:5050/session/session/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -20,31 +20,27 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
         credentials: 'include',
       });
-
+  
       if (response.status === 400) {
         toast.error("Invalid email or password");
         throw new Error("Invalid email or password");
       }
-
+  
       const data = await response.json();
-
-      console.log(data);
+  
+      console.log(data); // This should now include the userId
       sessionStorage.setItem('email', email);
+      sessionStorage.setItem('userId', data.userId); // Sets the user_id in sessionStorage
       toast.success("Logged in successfully!");
-
+  
       setTimeout(() => {
         navigate("/home");
       }, 5000); 
     } catch (error) {
       console.error(error);
       toast.error(error.message);
-
-      setTimeout(() => {
-        navigate("/error");
-      }, 5000); 
     }
   };
-
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'black' }}>
       <Card style={{ width: '40rem', padding: '40px', backgroundColor: '#8D88EA' }}>

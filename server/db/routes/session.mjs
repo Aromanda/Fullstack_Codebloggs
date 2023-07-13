@@ -2,6 +2,7 @@ import express from "express";
 import db from "../conn.mjs";
 import { ObjectId } from "mongodb";
 import cookieParser from 'cookie-parser';
+import sessionSchema from "../schemas/session.schemas.mjs";
 
 const router = express.Router();
 router.use(cookieParser());
@@ -56,7 +57,13 @@ router.post("/session", async (req, res) => {
       };
   
       try {
-        await db.collection('session').insertOne(cookieDocument);
+        const insertResult = await db.collection('session').insertOne(cookieDocument);
+        
+        if (insertResult.insertedCount === 1) {
+          const insertedDocumentId = insertResult.insertedId;
+          const retrievedDocument = await db.collection('session').findOne({ _id: insertedDocumentId });
+          console.log(retrievedDocument);
+        }
       } catch (e) {
         console.error(e);
       }
@@ -72,6 +79,33 @@ router.post("/session", async (req, res) => {
     res.status(500).json({error: "An error occurred"});
   }
 });
+
+router.get('/validate_token', async (req, res) => {
+  const token = req.query.token;
+  console.log('Token:', token);
+  const objectIdFromToken = token.split('_')[0];
+  console.log('objectIdFromToken:', objectIdFromToken);
+
+  let collection = await db.collection('session');
+
+  if (!ObjectId.isValid(objectIdFromToken)) {
+      res.status(400).json({ error: 'Invalid token format.' });
+      return;
+  }
+  
+  let query = { userId: new ObjectId(objectIdFromToken), cookie: token };
+  console.log('Query:', query);
+
+  let result = await collection.findOne(query);
+  console.log('Result:', result);
+
+  if (!result) {
+      res.status(404).json({ error: 'Token not found.' });
+  } else {
+      res.status(200).json({ message: 'Token is valid.' });
+  }
+});
+
 
 // This section will help you update a user by id.
 router.patch("/:id", async (req, res) => {
