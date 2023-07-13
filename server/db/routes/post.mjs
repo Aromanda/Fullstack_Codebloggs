@@ -26,5 +26,24 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get('/:userID', async (req, res) => { 
+  try {
+    const { userID } = req.params;
+    console.log(userID);
+    const collection = db.collection('post');
+
+    let query = { user_id: new ObjectId(userID) };
+    let result = await collection.find(query).toArray();
+    console.log(result);
+
+    // Send the comments as a response
+    res.status(200).json({ result });
+  } catch (error) {
+    // Send an error response if there's any issue
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred while retrieving the comments.' });
+  }
+});
+
 export default router;
 
