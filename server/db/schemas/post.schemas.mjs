@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose';
-
 const PostSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
@@ -18,9 +17,9 @@ const PostSchema = new Schema({
     required: true,
   },
   comments: [{
-    type: Schema.Types.ObjectId, 
+    type: Schema.Types.ObjectId,
+
     ref: "Comment",
   }],
 });
-
 export default mongoose.model('Post', PostSchema);

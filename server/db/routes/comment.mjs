@@ -54,5 +54,4 @@ router.get('/:userID', async (req, res) => {
     }
   });
   
-  
 export default router;

@@ -25,5 +25,3 @@ const CommentSchema = new Schema({
 export default mongoose.model('Comment', CommentSchema);
 
 
-
-

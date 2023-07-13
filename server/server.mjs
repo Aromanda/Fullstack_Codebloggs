@@ -5,6 +5,7 @@ import "./loadEnvironment.mjs";
 import userRouter from "./db/routes/user.mjs";
 import sessionRouter from './db/routes/session.mjs';
 import postRouter from './db/routes/post.mjs';
+import commentRouter from './db/routes/comment.mjs';
 
 const PORT = process.env.PORT || 5050;
 const app = express();
@@ -37,6 +38,7 @@ app.use("/session", sessionRouter);
 
 // Register the post router at the /post route
 app.use("/post", postRouter);
+app.use('/comment', commentRouter);
 
 // Start the Express server
 app.listen(PORT, () => {
