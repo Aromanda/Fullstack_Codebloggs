@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -13,76 +13,87 @@ import Network from "./components/network";
 import { toast } from 'react-toastify';
 
 
-
-
 const App = () => {
   const navigate = useNavigate();
-  const intervalId = useRef();
-
-  const validateToken = async (token) => {
-    console.log(`token: `+token)
-    console.log(typeof(token))
-    try {
-      const response = await fetch(`http://localhost:5050/session/validate_token?token=${token}`);
-      if (!response.ok) {
-        throw new Error('Token validation failed');
-      }
-      const data = await response.json();
-      console.log(data);
-      // You can now use this data to do any additional processing if required
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to validate token');
-    }
-  };
+  // const intervalId = useRef();
+  const [userId, setUserId] = useState('')
+  const [email, setEmail] = useState('')
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      if (!sessionStorage.getItem('token')) {
-        Cookies.remove('connect.sid');
-        navigate("/");
+    // const token = Cookies.get('connect.sid');
+    const token = sessionStorage.getItem('token')
+    const validateToken = async (token) => {
+
+      console.log(`token: `+token)
+
+      try {
+        const response = await fetch(`http://localhost:5050/session/validate_token?token=${token}`);
+        if (!response.ok) { throw new Error('Token validation failed');}
+
+        const data = await response.json();
+        console.log(`data`);
+        console.log(data);
+
+        setUserId(data.userId);
+        setEmail(data.email);
+
+      } catch (error) {
+        console.error(error);
+        toast.error('Failed to validate token');
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
+    validateToken(token).then(r => r)
+  }, [navigate])
 
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const handleStorageChange = () => {
+  //   console.log('WHATTT??????')
+  //     if (!sessionStorage.getItem('token')) {
+  //       Cookies.remove('connect.sid');
+  //       navigate("/");
+  //     }
+  //   };
+  //   window.addEventListener('storage', handleStorageChange);
+  //
+  //   return () => {
+  //     window.removeEventListener('storage', handleStorageChange);
+  //   }
+  // }, [navigate]);
 
-  useEffect(() => {
-    const checkCookie = () => {
-      const token = Cookies.get('connect.sid');
-      console.log(token)
-      if (!token && !window.location.pathname.includes("/create")) {
-        sessionStorage.clear();
-        navigate("/");
-      } else {
-        validateToken(token); 
-      }
-    };
+  // useEffect(() => {
+  //   const checkCookie = () => {
+  //     const token = Cookies.get('connect.sid');
+  //     console.log(token)
+  //     if (!token && !window.location.pathname.includes("/create")) {
+  //       sessionStorage.clear();
+  //       navigate("/");
+  //     } else {
+  //       validateToken(token).then(r => r);
+  //     }
+  //   };
 
-    intervalId.current = setInterval(checkCookie, 1000);
+    // intervalId.current = setInterval(checkCookie, 1000);
 
-    return () => {
-      clearInterval(intervalId.current);
-    }
-  }, [navigate]);
+    // return () => {
+    //   clearInterval(intervalId.current);
+    // }
+  // }, [navigate]);
 
-  const handleLogout = () => {
-    sessionStorage.clear();
-    Cookies.remove('connect.sid');
-    navigate("/");
-  };
+  // const handleLogout = () => {
+  //   sessionStorage.clear();
+  //   Cookies.remove('connect.sid');
+  //   navigate("/");
+  // };
 
   return (
     <div>
-      <Navbar handleLogout={handleLogout} />
+      {/*<Navbar handleLogout={handleLogout} />*/}
+      <Navbar email={email}/>
       <Routes>
         <Route path="/create" element={<Create />} />
         <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home handleLogout={handleLogout} />} />
+        <Route path="/home" element={<Home userId={userId}/>} />
         <Route path="/bloggs" element={<Bloggs />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/network" element={<Network />} />
