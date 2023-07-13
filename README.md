@@ -1,6 +1,7 @@
 
 ***Login Page***
 
+
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
 - Client side:  pas de données.
 
@@ -35,8 +36,10 @@ Body	email, password	    Brève description
 
 ***Registration page***
 
+
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
 - Client side: pas de données.
+
 
 - Server side: pas de données.
 
@@ -49,7 +52,9 @@ Body	email, password	    Brève description
 ```
 POST/user
 
+
 Paramètres
+
 
 TYPE	NOM	    Description
 Body	first_name, last_name, email, birthdate, password, occupation, location	Brève description
@@ -357,7 +362,9 @@ Réponse d'exemple
   message:"message descriptif"
 }
 
+
 ```
+
 
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
@@ -403,6 +410,8 @@ Réponse d'exemple
     - GET sur /user 
 
 - Server side:
+
+
 
 ```
     GET /user
