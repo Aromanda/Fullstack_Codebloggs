@@ -14,16 +14,6 @@ router.get("/", async (req, res) => {
   res.send(results).status(200);
 });
 
-// This section will help you get a single user by id
-// router.get("/:id", async (req, res) => {
-//   let collection = await db.collection("user");
-//   let query = {_id: new ObjectId(req.params.id)};
-//   let result = await collection.findOne(query);
-//
-//   if (!result) res.send("Not found").status(404);
-//   else res.send(result).status(200);
-// });
-
 router.post("/session", async (req, res) => {
   try {
     let { userId, email, password } = req.body;
@@ -83,17 +73,9 @@ router.post("/session", async (req, res) => {
 router.get('/validate_token', async (req, res) => {
   const token = req.query.token;
   console.log('Token:', token);
-  // const objectIdFromToken = token.split('_')[0];
-  // console.log('objectIdFromToken:', objectIdFromToken);
 
   let collection = await db.collection('session');
 
-  // if (!ObjectId.isValid(objectIdFromToken)) {
-  //     res.status(400).json({ error: 'Invalid token format.' });
-  //     return;
-  // }
-  
-  // let query = { userId: new ObjectId(objectIdFromToken), cookie: token };
   let query = { cookie: token };
   // console.log('Query:', query);
 
@@ -127,14 +109,5 @@ router.patch("/:id", async (req, res) => {
   res.send(result).status(200);
 });
 
-// This section will help you delete a user
-// router.delete("/:id", async (req, res) => {
-//   const query = { _id: new ObjectId(req.params.id) };
-//
-//   const collection = db.collection("user");
-//   let result = await collection.deleteOne(query);
-//
-//   res.send(result).status(200);
-// });
 
 export default router;

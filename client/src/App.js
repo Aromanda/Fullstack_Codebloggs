@@ -46,46 +46,6 @@ const App = () => {
     validateToken(token).then(r => r)
   }, [navigate])
 
-  // useEffect(() => {
-  //   const handleStorageChange = () => {
-  //   console.log('WHATTT??????')
-  //     if (!sessionStorage.getItem('token')) {
-  //       Cookies.remove('connect.sid');
-  //       navigate("/");
-  //     }
-  //   };
-  //   window.addEventListener('storage', handleStorageChange);
-  //
-  //   return () => {
-  //     window.removeEventListener('storage', handleStorageChange);
-  //   }
-  // }, [navigate]);
-
-  // useEffect(() => {
-  //   const checkCookie = () => {
-  //     const token = Cookies.get('connect.sid');
-  //     console.log(token)
-  //     if (!token && !window.location.pathname.includes("/create")) {
-  //       sessionStorage.clear();
-  //       navigate("/");
-  //     } else {
-  //       validateToken(token).then(r => r);
-  //     }
-  //   };
-
-    // intervalId.current = setInterval(checkCookie, 1000);
-
-    // return () => {
-    //   clearInterval(intervalId.current);
-    // }
-  // }, [navigate]);
-
-  // const handleLogout = () => {
-  //   sessionStorage.clear();
-  //   Cookies.remove('connect.sid');
-  //   navigate("/");
-  // };
-
   return (
     <div>
       {/*<Navbar handleLogout={handleLogout} />*/}

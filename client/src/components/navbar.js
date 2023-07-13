@@ -102,7 +102,7 @@ export default function MyNavbar() {
     <div>
       <Navbar expand="lg" bg="light" variant="light" style={{ display: "flex", justifyContent: "space-between" }}>
         <Navbar.Brand as={NavLink} to="/">
-          <Image style={logoStyle} src="/images/codebloggs/codebloggs logo2.png" alt="Logo" />
+          <Image style={logoStyle} src="/client/public/CodeBloggs graphic.png" alt="Logo" />
         </Navbar.Brand>
         {!(location.pathname === "/" || location.pathname === "/create") && (
           <Button style={postButtonStyle} onClick={handleModalOpen}>
