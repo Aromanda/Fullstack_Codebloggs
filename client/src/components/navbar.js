@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Navbar, Dropdown, Button, Modal, Form, Image } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
+import Cookies from "js-cookie";
 
 
 export default function MyNavbar() {
@@ -33,8 +34,9 @@ export default function MyNavbar() {
   const handlePostContentChange = (event) => setNewPostContent(event.target.value);
 
   async function handleLogout() {
-    await fetch("http://localhost:5050/logout", { method: "POST", credentials: "include" });
+    // await fetch("http://localhost:5050/logout", { method: "POST", credentials: "include" });
     sessionStorage.clear();
+    Cookies.remove('connect.sid');
     document.cookie = "connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     navigate("/");
   }
