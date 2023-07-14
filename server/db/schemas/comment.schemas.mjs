@@ -1,9 +1,8 @@
-
 import mongoose, { Schema } from 'mongoose';
 const CommentSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
-    default: () => new mongoose.Types.ObjectId(),
+    required:true
   },
   post_id: {
     type: Schema.Types.ObjectId,
@@ -23,5 +22,3 @@ const CommentSchema = new Schema({
   },
 });
 export default mongoose.model('Comment', CommentSchema);
-
-
