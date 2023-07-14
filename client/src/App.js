@@ -16,6 +16,7 @@ const App = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState('')
   const [email, setEmail] = useState('')
+  const [postId, setPostId] = useState('')
 
   useEffect(() => {
     const token = sessionStorage.getItem('token')
@@ -33,6 +34,7 @@ const App = () => {
 
         setUserId(data.userId);
         setEmail(data.email);
+        setPostId(data.postId);
 
       } catch (error) {
         console.error(error);
@@ -55,7 +57,7 @@ const App = () => {
         <Route path="/home" element={<Home userId={userId} />} />
         <Route path="/bloggs" element={<Bloggs userId={userId} />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/network" element={<Network userId={userId} />} />
+        <Route path="/network" element={<Network userId={userId} postId={postId} />} />
       </Routes>
     </div>
   );
