@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, Card } from "react-bootstrap";
 import Sidebar from './sidebar';
 
 const Main = () => {
@@ -46,6 +46,47 @@ const Main = () => {
           </Form.Group>
           <Button type="submit">Submit</Button>
         </Form>
+
+        <br />
+
+        <Card>
+          <Card.Body>
+            <Card.Text className="text-center">
+              BLOG POST
+            </Card.Text>
+          </Card.Body>
+        </Card>
+
+        <br />
+
+        <Card>
+          <Card.Body>
+            <Card.Text className="text-center">
+            BLOG POST
+            </Card.Text>
+          </Card.Body>
+        </Card>
+
+        <br />
+
+        <Card>
+          <Card.Body>
+            <Card.Text className="text-center">
+            BLOG POST
+            </Card.Text>
+          </Card.Body>
+        </Card>
+
+        <br />
+
+        <Card>
+          <Card.Body>
+            <Card.Text className="text-center">
+            BLOG POST
+            </Card.Text>
+          </Card.Body>
+        </Card>
+
       </div>
     </Container>
   );

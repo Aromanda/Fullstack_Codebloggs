@@ -3,8 +3,8 @@ import { Container } from "react-bootstrap";
 import Sidebar from './sidebar'; 
 
 const Main = (props) => {
-  const {userId} = props
-    console.log(`HOME MOTHER FUCKING PAGE: `+userId)
+  const {userId, postId} = props
+    console.log(`This is the user ID: `+userId + postId);
   return (
     <Container fluid style={{ backgroundColor: "#8D88EA", height: "100vh", padding: 0 }}>
       <Sidebar /> {/* here we're including the Sidebar */}
