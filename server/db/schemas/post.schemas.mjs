@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 const PostSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
-    default: () => new mongoose.Types.ObjectId(),
+    required:true
   },
   likes: {
     type: Number,
@@ -18,7 +18,6 @@ const PostSchema = new Schema({
   },
   comments: [{
     type: Schema.Types.ObjectId,
-
     ref: "Comment",
   }],
 });
