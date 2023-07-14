@@ -70,6 +70,7 @@ export default function MyNavbar() {
   const isMainPage = location.pathname === "/main";
   const isBloggsPage = location.pathname === "/bloggs";
   const isNetworkPage = location.pathname === "/network";
+  const isAdminPage = location.pathname === "/admin";
 
   let logoStyle = {
     width: "30%",
@@ -77,7 +78,7 @@ export default function MyNavbar() {
 
   if (isLoginPage || isCreatePage) {
     logoStyle.width = "50%";
-  } else if (isMainPage || isBloggsPage || isNetworkPage) {
+  } else if (isMainPage || isBloggsPage || isNetworkPage || isAdminPage) {
     logoStyle.width = "40%";
   }
 
