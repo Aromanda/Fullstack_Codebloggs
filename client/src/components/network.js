@@ -1,39 +1,74 @@
-import React from "react";
-import { Container, Row, Col, Card } from 'react-bootstrap';
-import Sidebar from './sidebar'; 
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Card } from "react-bootstrap";
+import Sidebar from "./sidebar";
 
-const Main = () => {
+
+const Main = ({ userId }) => {
+  const [userData, setUserData] = useState(null);
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:5050/user/${userId}`);
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserData();
+  }, [userId]);
+
+  // const fetchPosts = async () => {
+  //   const response = await fetch("http://localhost:5050/post/");
+  //   console.log(response);
+  //   if (response.ok) {
+  //     const data = await response.json();
+  //     setPosts(data.result);
+  //     data.result.forEach((post) => {
+  //       fetchUser(post.user_id);
+  //     });
+  //     console.log(data);
+  //   } else {
+  //     console.error("Failed to fetch posts. Please try again.");
+  //   }
+  // };
+
   return (
     <Container fluid style={{ backgroundColor: "#8D88EA", height: "100vh", padding: 0 }}>
       <Row>
         <Col xs={2}>
-          <Sidebar /> {/* here we're including the Sidebar */}
+          <Sidebar />
         </Col>
         <Col xs={10}>
           <div style={{ padding: "20px" }}>
             <h1>Welcome to the network Page!</h1>
-            <Row xs={1} md={2} className="g-4">
-              {Array.from({ length: 6 }).map((_, idx) => (
-                <Col key={idx}>
-                  <Card>
-                    <Card.Img variant="top" src="" />
-                    <Card.Body>
-                      <Card.Title>USER CARD</Card.Title>
-                      <Card.Text>
-                        This is a longer card with supporting text below as a natural
-                        lead-in to additional content. This content is a little bit
-                        longer.
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+            {userData && (
+              <Card>
+                <Card.Body>
+                  <Card.Title>{userData.name}</Card.Title>
+                  <Card.Text>
+                    <strong>Email:</strong> {userData.email}
+                    <br />
+                    <strong>first_name:</strong> {userData.first_name}
+                    <br />
+                    <strong>last_name:</strong> {userData.last_name}
+                    <br />
+                    <strong>Location:</strong> {userData.location}
+                    <br />
+                    <strong>birthdate:</strong> {userData.birthdate}
+                    <br />
+                    <strong>occupation:</strong> {userData.occupation}
+                    <br />
+                    <strong>status:</strong> {userData.status}
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            )}
           </div>
         </Col>
       </Row>
     </Container>
   );
-}
-
+};
 export default Main;
