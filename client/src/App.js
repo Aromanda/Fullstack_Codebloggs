@@ -39,24 +39,25 @@ const App = () => {
         toast.error('Failed to validate token');
       }
     };
-
-    validateToken(token).then(r => r)
+    if (token) {
+      validateToken(token);
+    } else {
+      navigate("/"); // Redirect to login page if no token is found
+    }
   }, [navigate])
 
   return (
     <div>
-      {/*<Navbar handleLogout={handleLogout} />*/}
-      <Navbar email={email}/>
+      <Navbar email={email} userId={userId} />
       <Routes>
         <Route path="/create" element={<Create />} />
         <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home userId={userId}/>} />
-        <Route path="/bloggs" element={<Bloggs />} />
+        <Route path="/home" element={<Home userId={userId} />} />
+        <Route path="/bloggs" element={<Bloggs userId={userId} />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/network" element={<Network />} />
+        <Route path="/network" element={<Network userId={userId} />} />
       </Routes>
     </div>
   );
 };
-
 export default App;
