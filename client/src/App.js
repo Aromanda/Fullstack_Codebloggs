@@ -1,7 +1,6 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar";
 import Create from "./components/create";
@@ -15,12 +14,10 @@ import { toast } from 'react-toastify';
 
 const App = () => {
   const navigate = useNavigate();
-  // const intervalId = useRef();
   const [userId, setUserId] = useState('')
   const [email, setEmail] = useState('')
 
   useEffect(() => {
-    // const token = Cookies.get('connect.sid');
     const token = sessionStorage.getItem('token')
     const validateToken = async (token) => {
 
