@@ -9,20 +9,15 @@ const collection = db.collection("post");
 // Create a new post
 router.post("/", async (req, res) => {
   try {
-    // Create a new post object
-    const newPost = new PostSchemas(req.body);
-    const collection = db.collection("post");
-    // Insert the new post into the database
-    const result = await collection.insertOne(newPost);
-    const response = {
-      user_id: req.body.user_id,
-      post: result
-    };
-    console.log(response);
-    res.status(201).json({ message: "Post created successfully", response });
+    const { user_id, post_id, content } = req.body;
+    // Create a new comment object
+    const newComment = new Comment({ user_id, post_id, content });
+    // Save the new comment to the database
+    await newComment.save();
+    res.status(201).json({ message: "Comment created successfully", comment: newComment });
   } catch (error) {
-    console.error("Error creating the post:", error);
-    res.status(500).json({ error: "Failed to create the post" });
+    console.error("Error creating the comment:", error);
+    res.status(500).json({ error: "Failed to create the comment" });
   }
 });
 router.get('/:userID', async (req, res) => {

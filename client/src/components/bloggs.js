@@ -5,25 +5,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 const Main = ({ userId }) => {
   const [posts, setPosts] = useState([]);
-  // const [newPostContent, setNewPostContent] = useState("");
+  const [newPostContent, setNewPostContent] = useState("");
   const [comments, setComments] = useState({});
   const [users, setUsers] = useState({});
-  const handleSubmit = async (e, postId) => {
-    e.preventDefault();
-    const response = await fetch("http://localhost:5050/comment/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ content: e.target.elements.comment.value, user_id: userId }),
-    });
-    if (response.ok) {
-      fetchComments(postId);
-      e.target.reset(); // Reset the comment input field
-    } else {
-      console.error("Failed to submit comment. Please try again.");
-    }
-  };
+    const handleSubmit = async (e, postId) => {
+      e.preventDefault();
+      const response = await fetch("http://localhost:5050/comment/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: e.target.elements.comment.value,
+          user_id: userId,
+          post_id: postId, // Pass the correct post ID here
+        }),
+      });
+      if (response.ok) {
+        fetchComments(postId);
+        e.target.reset(); // Reset the comment input field
+      } else {
+        console.error("Failed to submit comment. Please try again.");
+      }
+    };
   const fetchPosts = async () => {
     const response = await fetch("http://localhost:5050/post/");
     if (response.ok) {
@@ -62,14 +66,14 @@ const Main = ({ userId }) => {
     <Container fluid style={{ backgroundColor: "#8D88EA", height: "100vh", padding: 0 }}>
       <Sidebar />
       <div style={{ marginLeft: "15%", padding: "20px" }}>
-        <h1>Welcome to the Bloggs Page!</h1>
+        <h1>The Bloggs !</h1>
         {posts.map((post) => (
           <div key={post._id}>
             <br />
             <Card>
               {/* Post content */}
               <Card.Body>
-                <Card.Text className="text-center">
+                <Card.Text className="text-center" style={{ fontSize: "30px" }}>
                   {post.content}
                 </Card.Text>
                 <div className="d-flex justify-content-between">

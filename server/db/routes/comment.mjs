@@ -9,6 +9,7 @@ router.post('/', async (req, res) => {
     // Create a new Comment document
     const newComment = new CommentSchema({
       ...req.body,
+      post_id: req.body.post_id, // Assign the post_id from the request body
       user_ID: req.user_ID
     });
     // Save the comment to the MongoDB collection

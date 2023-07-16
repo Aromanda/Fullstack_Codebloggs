@@ -2,11 +2,12 @@ import mongoose, { Schema } from 'mongoose';
 const CommentSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
-    required:true
+    required: true,
   },
   post_id: {
     type: Schema.Types.ObjectId,
-    default: () => new mongoose.Types.ObjectId(),
+    ref: 'Post',
+    required: true,
   },
   likes: {
     type: Number,
