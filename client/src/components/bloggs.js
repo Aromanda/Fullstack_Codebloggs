@@ -8,26 +8,26 @@ const Main = ({ userId }) => {
   const [newPostContent, setNewPostContent] = useState("");
   const [comments, setComments] = useState({});
   const [users, setUsers] = useState({});
-    const handleSubmit = async (e, postId) => {
-      e.preventDefault();
-      const response = await fetch("http://localhost:5050/comment/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          content: e.target.elements.comment.value,
-          user_id: userId,
-          post_id: postId, // Pass the correct post ID here
-        }),
-      });
-      if (response.ok) {
-        fetchComments(postId);
-        e.target.reset(); // Reset the comment input field
-      } else {
-        console.error("Failed to submit comment. Please try again.");
-      }
-    };
+  const handleSubmit = async (e, postId) => {
+    e.preventDefault();
+    const response = await fetch("http://localhost:5050/comment/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: e.target.elements.comment.value,
+        user_id: userId,
+        post_id: postId,
+      }),
+    });
+    if (response.ok) {
+      fetchComments(postId);
+      e.target.reset();
+    } else {
+      console.error("Failed to submit comment. Please try again.");
+    }
+  };
   const fetchPosts = async () => {
     const response = await fetch("http://localhost:5050/post/");
     if (response.ok) {
@@ -59,6 +59,21 @@ const Main = ({ userId }) => {
       console.error("Failed to fetch comments. Please try again.");
     }
   };
+  const handleLike = async (postId) => {
+    const response = await fetch(`http://localhost:5050/post/${postId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        likes: 1,
+      }),
+    });
+    const data = await response.json();
+    if (data.message === "Likes updated successfully") {
+      setPosts(posts.map((post) => post._id === postId ? {...post, likes: post.likes + 1} : post));
+    }
+  };
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -66,7 +81,7 @@ const Main = ({ userId }) => {
     <Container fluid style={{ backgroundColor: "#8D88EA", height: "100vh", padding: 0 }}>
       <Sidebar />
       <div style={{ marginLeft: "15%", padding: "20px" }}>
-        <h1>The Bloggs !</h1>
+        <h1>the Bloggs Page!</h1>
         {posts.map((post) => (
           <div key={post._id}>
             <br />
@@ -85,7 +100,7 @@ const Main = ({ userId }) => {
                       : 'Fetching user...'
                     }
                   </div>
-                  <Button variant="primary">
+                  <Button variant="primary" onClick={() => handleLike(post._id)}>
                     <FontAwesomeIcon icon={faThumbsUp} /> {post.likes}
                   </Button>
                 </div>
