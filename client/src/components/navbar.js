@@ -3,9 +3,9 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Navbar, Dropdown, Button, Modal, Form, Image } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import Cookies from "js-cookie";
-
-
-export default function MyNavbar() {
+export default function MyNavbar(props) {
+  const {userId}=props
+  console.log(userId)
   const [agentName, setAgentName] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,12 +27,9 @@ export default function MyNavbar() {
     }
     fetchAgentData();
   }, []);
-
   const handleModalOpen = () => setShowModal(true);
   const handleModalClose = () => setShowModal(false);
-
   const handlePostContentChange = (event) => setNewPostContent(event.target.value);
-
   async function handleLogout() {
     // await fetch("http://localhost:5050/logout", { method: "POST", credentials: "include" });
     sessionStorage.clear();
@@ -40,18 +37,19 @@ export default function MyNavbar() {
     document.cookie = "connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     navigate("/");
   }
-
+  const handleAccountSettings = () => {
+    alert("This function will be up shortly!!!");
+  };
   async function handleSubmitPost() {
-    console.log(newPostContent)
+    console.log(newPostContent);
     try {
       const response = await fetch("http://localhost:5050/post", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ content: newPostContent }),
+        body: JSON.stringify({ content: newPostContent, user_id: userId }), // Include the userId in the request body
       });
-
       if (response.ok) {
         console.log("Post submitted successfully");
       } else {
@@ -60,28 +58,22 @@ export default function MyNavbar() {
     } catch (error) {
       console.log("Error submitting the post:", error);
     }
-
     handleModalClose();
     setNewPostContent("");
   }
-
   const isLoginPage = location.pathname === "/login";
   const isCreatePage = location.pathname === "/create";
   const isMainPage = location.pathname === "/main";
   const isBloggsPage = location.pathname === "/bloggs";
   const isNetworkPage = location.pathname === "/network";
-  const isAdminPage = location.pathname === "/admin";
-
   let logoStyle = {
     width: "30%",
   };
-
   if (isLoginPage || isCreatePage) {
     logoStyle.width = "50%";
-  } else if (isMainPage || isBloggsPage || isNetworkPage || isAdminPage) {
+  } else if (isMainPage || isBloggsPage || isNetworkPage) {
     logoStyle.width = "40%";
   }
-
   const postButtonStyle = {
     backgroundColor: "#8D88EA",
     color: "white",
@@ -89,21 +81,18 @@ export default function MyNavbar() {
     padding: "10px 120px",
     marginRight: "auto",
   };
-
   const modalContainerStyle = {
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#F8F9FA",
   };
-
   const submitButtonStyle = {
     backgroundColor: "black",
     color: "white",
   };
-
   return (
     <div>
       <Navbar expand="lg" bg="light" variant="light" style={{ display: "flex", justifyContent: "space-between" }}>
         <Navbar.Brand as={NavLink} to="/">
-          <Image style={logoStyle} src="/client/public/CodeBloggs graphic.png" alt="Logo" />
+          <Image style={logoStyle} src="/rocketElevators/codebloggs logo2.png" alt="Logo" />
         </Navbar.Brand>
         {!(location.pathname === "/" || location.pathname === "/create") && (
           <Button style={postButtonStyle} onClick={handleModalOpen}>
@@ -126,11 +115,8 @@ export default function MyNavbar() {
             >
               {agentName} <i className="fas fa-caret-down"></i>
             </Dropdown.Toggle>
-
             <Dropdown.Menu>
-              <Dropdown.Item as={NavLink} to="/account-settings">
-                Account Settings
-              </Dropdown.Item>
+              <Dropdown.Item onClick={handleAccountSettings}>Account Settings</Dropdown.Item> {/* Handle Account Settings click */}
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
