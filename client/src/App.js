@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar";
@@ -9,45 +9,35 @@ import Home from "./components/home";
 import Bloggs from "./components/bloggs";
 import Admin from "./components/admin";
 import Network from "./components/network";
-import { toast } from 'react-toastify';
-
-
+import { toast } from "react-toastify";
 const App = () => {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState('')
-  const [email, setEmail] = useState('')
-  const [postId, setPostId] = useState('')
-
+  const [userId, setUserId] = useState("");
+  const [email, setEmail] = useState("");
+  const [postId, setPostId] = useState("");
   useEffect(() => {
-    const token = sessionStorage.getItem('token')
-    const validateToken = async (token) => {
-
-      console.log(`token: `+token)
-
-      try {
-        const response = await fetch(`http://localhost:5050/session/validate_token?token=${token}`);
-        if (!response.ok) { throw new Error('Token validation failed');}
-
-        const data = await response.json();
-        console.log(`data`);
-        console.log(data);
-
-        setUserId(data.userId);
-        setEmail(data.email);
-        setPostId(data.postId);
-
-      } catch (error) {
-        console.error(error);
-        toast.error('Failed to validate token');
-      }
-    };
-    if (token) {
+    const token = sessionStorage.getItem("token");
+    if (token && window.location.pathname !== "/create") {
+      const validateToken = async (token) => {
+        try {
+          const response = await fetch(`http://localhost:5050/session/validate_token?token=${token}`);
+          if (!response.ok) {
+            throw new Error("Token validation failed");
+          }
+          const data = await response.json();
+          setUserId(data.userId);
+          setEmail(data.email);
+          setPostId(data.postId);
+        } catch (error) {
+          console.error(error);
+          toast.error("Failed to validate token");
+        }
+      };
       validateToken(token);
-    } else {
+    } else if (!token && window.location.pathname !== "/create") {
       navigate("/"); // Redirect to login page if no token is found
     }
-  }, [navigate])
-
+  }, [navigate]);
   return (
     <div>
       <Navbar email={email} userId={userId} />
