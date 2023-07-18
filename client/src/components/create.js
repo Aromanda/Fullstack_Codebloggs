@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
-
 const Create = () => {
   const navigate = useNavigate();
-
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -16,25 +14,28 @@ const Create = () => {
     occupation: "",
     auth_level: "basic"
   });
-
   const [showCreateModal, setShowCreateModal] = useState(false);
-
   const updateForm = (e) => {
     const { name, value } = e.target;
-    setForm((prevForm) => ({
-      ...prevForm,
-      [name]: value.slice(0, 30),
-    }));
+    if(name === "auth_level"){
+      setForm((prevForm) => ({
+        ...prevForm,
+        [name]: e.target.checked ? "admin" : "basic",
+      }));
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        [name]: value.slice(0, 30),
+      }));
+    }
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setShowCreateModal(true);
   };
-
   const confirmCreate = async () => {
-    const newPerson = { ...form};
-  console.log(newPerson)
+    const newPerson = { ...form };
+    console.log(newPerson)
     try {
       const response = await fetch("http://localhost:5050/user", {
         method: "POST",
@@ -54,7 +55,7 @@ const Create = () => {
           status: "",
           location: "",
           occupation: "",
-          auth_level: ""
+          auth_level: "basic"
         });
         setShowCreateModal(false);
         navigate("/");
@@ -66,11 +67,9 @@ const Create = () => {
       console.error("Error:", error);
     }
   };
-
   const handleClose = () => {
     setShowCreateModal(false);
   };
-
   return (
     <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "75vh", backgroundColor: "#000000" }}>
       <div className="card" style={{ width: "40rem", backgroundColor: "#8D88EA" }}>
@@ -79,6 +78,14 @@ const Create = () => {
             Registration
           </h3>
           <form onSubmit={handleSubmit}>
+            {/* hidden input field added here */}
+            <input
+              type="checkbox"
+              id="admin_auth"
+              name="auth_level"
+              style={{display: 'none'}}
+              onChange={updateForm}
+            />
             <div className="row">
               <div className="col">
                 <div className="form-group">
@@ -212,12 +219,9 @@ const Create = () => {
                 </div>
               </div>
             </div>
-            <br />
-            <div className="form-group d-flex justify-content-center">
-              <Button variant="primary" type="submit" style={{ fontSize: "20px", padding: "10px 80px" }}>
-                Register
-              </Button>
-            </div>
+            <button type="submit" className="btn btn-dark btn-block">
+              Submit
+            </button>
           </form>
           <Modal show={showCreateModal} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -238,5 +242,4 @@ const Create = () => {
     </div>
   );
 };
-
 export default Create;
