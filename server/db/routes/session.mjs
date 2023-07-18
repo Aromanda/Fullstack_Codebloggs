@@ -70,26 +70,49 @@ router.post("/session", async (req, res) => {
   }
 });
 
+// router.get('/validate_token', async (req, res) => {
+//   const token = req.query.token;
+//   console.log('Token:', token);
+
+//   let collection = await db.collection('session');
+
+//   let query = { cookie: token };
+//   // console.log('Query:', query);
+
+//   let result = await collection.findOne(query);
+//   // console.log('Result:', result);
+
+//   if (!result) {
+//       res.status(404).json({ error: 'Token not found.' });
+//   } else {
+//       res.status(200).json({ message: 'Token is valid.', userId: result.userId, email: result.email });
+//   }
+// });
+
 router.get('/validate_token', async (req, res) => {
   const token = req.query.token;
   console.log('Token:', token);
-
-  let collection = await db.collection('session');
-
-  let query = { cookie: token };
-  // console.log('Query:', query);
-
-  let result = await collection.findOne(query);
-  // console.log('Result:', result);
-
-  // console.log(`result`)
-  // console.log(result)
-
-  if (!result) {
-      res.status(404).json({ error: 'Token not found.' });
-  } else {
-      res.status(200).json({ message: 'Token is valid.', userId: result.userId, email: result.email });
+  let sessionCollection = await db.collection('session');
+  let userCollection = await db.collection('user');  // moved up
+  let sessionQuery = { cookie: token };
+  let sessionResult = await sessionCollection.findOne(sessionQuery);
+  if (!sessionResult) {
+    res.status(404).json({ error: 'Token not found.' });
+    return; // Return early if sessionResult doesn't exist
   }
+  // Convert the userId to an ObjectId before querying the user collection
+  let userQuery = { _id: new ObjectId(sessionResult.userId) };
+  let userResult = await userCollection.findOne(userQuery);
+  if (!userResult) {
+    res.status(404).json({ error: 'User not found.' });
+    return; // Return early if userResult doesn't exist
+  }
+  res.status(200).json({
+    message: 'Token is valid.',
+    userId: sessionResult.userId,
+    email: sessionResult.email,
+    auth_level: userResult.auth_level // return the auth_level from the user collection
+  });
 });
 
 
