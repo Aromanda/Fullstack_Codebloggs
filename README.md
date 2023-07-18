@@ -11,7 +11,7 @@
     
 - Client side: 
   - submit login form afin de valider email et password. 
-  - link qui emmene à la page register
+  - link qui emmene à la page register.
 
 - Server side: 
 ```
@@ -34,7 +34,7 @@ Body	email, password	    Brève description
  
 ---
 
-***Registration page***
+***Create page***
 
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
@@ -57,7 +57,7 @@ Paramètres
 
 
 TYPE	NOM	    Description
-Body	first_name, last_name, email, birthdate, password, occupation, location	Brève description
+Body	first_name, last_name, email, birthday, password, occupation, status, auth level location	Brève description
  
 Réponse d'exemple
 
@@ -67,7 +67,7 @@ Réponse d'exemple
     first_name: "John",
     last_name: "Doe",
     email: "john_doe@gmail.com",
-    birthdate: "01/01/2020",
+    birthday: "01/01/2020",
     password: "Codeboxx",
     status:"il fait beau dehors",
     occupation: "Dev",
@@ -81,7 +81,7 @@ Réponse d'exemple
 
 ---
 
-***Main page***
+***Home page***
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
 - Client side: pas de données.
@@ -101,6 +101,7 @@ Réponse d'exemple
 {
   status:"ok",
   data:{
+    _id: ""
    first_name: "John",
     last_name: "Doe", 
     birthday: "01/01/2020", 
@@ -116,6 +117,28 @@ Réponse d'exemple
 }
 ```
 
+```
+GET/post
+
+Paramètres
+
+TYPE	NOM	    Description
+Body	_id, user_id, likes, content, comment, time_stamp Brève description
+ 
+Réponse d'exemple
+
+{
+  result: "",
+  _id : "",
+  user_id: "",
+  likes: number,
+  content: "post",
+  comment: [],
+  time_stamp: ""
+  },
+
+```
+
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
 - Client side: 
@@ -128,11 +151,34 @@ Réponse d'exemple
         - Bloggs: Navigate vers la page Bloggs view.
         - Network: Navigate vers la page Network view.
 
-- Server side: pas d'action.
+- Server side: 
+
+
+```
+POST/comment
+
+Paramètres
+
+TYPE	NOM	    Description
+Body	post_id, user_ID Brève description
+ 
+Réponse d'exemple
+
+{
+  result: "",
+  _id: "",
+  user_id: "",
+  post_id: "",
+  likes: number,
+  content: "",
+  time_stamp: ""
+  },
+
+```
 
 ---
 
-***Publication page (MODAL)***
+***Post page (MODAL)***
 
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
 - Client side: pas de données. 
@@ -159,35 +205,14 @@ Réponse d'exemple
 
 {
     status:"ok",
-  data:{
-    [
-        {
-            _id: ObjectID,
-            content:"I am a post #1",
-            user_id: ObjectID,
-            likes: "3",
-            timestamps: "2023-05-14",
-            comment: [
-                {
-
-            _id: ObjectID,
-            content: "I am a comment #1",
-            post_id: 1,
-            user_id: 1,
-            likes: 3,
-            time_stamps: "string"
-                },
-                {
-                    ...
-                }
-                ]
-        },
-        {
-            ...
-        },
-    ]
-  },
-  message:"message descriptif"
+    message: "post created successfully", 
+    response: {
+      user_id: "",
+      post_id: {
+        acknowledge: true,
+        insertId: "",
+      }
+    },
 }
 
 ```
@@ -319,49 +344,24 @@ Réponse d'exemple
 - Server side: 
 
 ```
-    GET/post/{user_id}
+GET/post
 
 Paramètres
 
-TYPE	NOM	Description
-Query	user_id	Brève description
+TYPE	NOM	    Description
+Body	_id, user_id, likes, content, comment, time_stamp Brève description
  
-
 Réponse d'exemple
 
 {
-    status:"ok",
-  data:{
-    [
-        {
-            _id: ObjectID,
-            content:"I am a post #1",
-            user_id: ObjectID,
-            likes: "3",
-            timestamps: "2023-05-14",
-            comment: [
-                {
-
-            _id: ObjectID,
-            content: "I am a comment #1",
-            post_id: 1,
-            user_id: 1,
-            likes: 3,
-            time_stamps: "string"
-                },
-                {
-                    ...
-                }
-                ]
-        },
-        {
-            ...
-        },
-    ]
+  result: "",
+  _id : "",
+  user_id: "",
+  likes: number,
+  content: "post",
+  comment: [],
+  time_stamp: ""
   },
-  message:"message descriptif"
-}
-
 
 ```
 
@@ -369,36 +369,104 @@ Réponse d'exemple
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
 - Client side: 
-    - POST pour créer un "like".
-    - POST au comment Endpoint qui est relié à son POST _id.
+    - POST pour créer un comment
+    - GET pour avoir les initiales
+    - GET pour avoir tous les comments
+    - PATCH pour modifier les likes
+    
 
 - Server side:
 
 ```
-    POST/comment/{user_id}
+POST/comment
 
 Paramètres
 
-TYPE	NOM	Description
-Query	user_id	Brève description
-
+TYPE	NOM	    Description
+Body	post_id, user_ID Brève description
  
-
 Réponse d'exemple
 
 {
-  status:"ok",
-  data:{
-    _id: ObjectID,
-            content: "I am a comment #1",
-            post_id: 1,
-            user_id: 1,
-            likes: 3,
-            time_stamps: "string"
+  result: "",
+  _id: "",
+  user_id: "",
+  post_id: "",
+  likes: number,
+  content: "",
+  time_stamp: ""
   },
-  message:"message descriptif"
 
-}
+```
+
+```
+GET/user/${user_id}
+
+Paramètres
+
+TYPE	NOM	    Description
+Query	user_id, Brève description
+ 
+Réponse d'exemple
+
+{
+  _id: "",
+  first_name: "",
+  last_name: "",
+  birthday: number,
+  email: "",
+  password: "",
+  status: "",
+  location: "",
+  occupation: "",
+  auth level: ""
+  },
+
+```
+
+```
+GET/comment/${post_id}
+
+Paramètres
+
+TYPE	NOM	    Description
+Query	post_id, Brève description
+ 
+Réponse d'exemple
+
+{
+  result: "",
+  _id: "",
+  user_id: "",
+  post_id: "",
+  likes: number,
+  content: "",
+  time_stamp: ""
+  },
+
+```
+
+```
+PATCH/post/${post_id}
+
+Paramètres
+
+TYPE	NOM	    Description
+Query	post_id, Brève description
+ 
+Réponse d'exemple
+
+{
+  message: " Likes update successfuly ",
+  post: {
+    _id: "",
+    user_id: "", 
+    likes: number,
+    content: "",
+    comment: [],
+    time_stamp: ""
+  }
+  },
 
 ```
 ---
@@ -445,35 +513,30 @@ Réponse d'exemple
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
 - Client side:
-    - GET sur /user
+    - POST sur /user_id
 
 - Server side:
 
 ```
-    GET/user/{user_id}
+    POST/user/${user_id}
 
 Paramètres
 
-TYPE	NOM	    Description
-Body	user_id	Brève description
+TYPE	NOM	Description
+Query	user_id	Brève description
  
 
 Réponse d'exemple
 
 {
-  status:"ok",
-  data:{
-    first_name: "John",
-    last_name: "Doe",
-    email: "john_doe@gmail.com",
-    birthdate: "01/01/2020",
-    password: "Codeboxx",
-    occupation: "Dev",
-    location: "Montreal",
-    auth_level: "basic"
-  },
-  message:"message descriptif"
-
+  message:"POST created successfuly",
+  response: {
+    user_id: "", 
+    post: {
+      acknowledged: true,
+      insertId: "",
+    }
+  }
 }
 
 ```
@@ -484,30 +547,8 @@ Réponse d'exemple
 ### Quelles sont les DONNÉES, le cas échéant, requises à partir du backend pour afficher le wireframe ?
 
 - Client side: 
-    - GET sur /admin pour vérifier si user a l'authentification.
 
 - Server side: 
-
-```
-    GET /admin
-Paramètres
-
-TYPE	NOM	Description
-Body	body_param	Brève description
- 
-
-Réponse d'exemple
-
-{
-  status:"ok",
-  data:{
-    email:"valid"
-  },
-  message:"message descriptif"
-
-}
-
-```
 
 ### Quelles sont les ACTIONS, le cas échéant, pour lesquelles ce wireframe est responsable ?
 
@@ -515,26 +556,3 @@ Réponse d'exemple
 
 - Server side: pas d'action
 
-```
-    VERBE /route/{path_param}?query_param=param_value
-
-Paramètres
-
-TYPE	NOM	Description
-Path	path_param	Brève description
-Query	query_param	Brève description
-Body	body_param	Brève description
- 
-
-Réponse d'exemple
-
-{
-  status:"ok",
-  data:{
-    key:value,
-  },
-  message:"message descriptif"
-
-}
-
-```
