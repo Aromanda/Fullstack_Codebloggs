@@ -3,6 +3,7 @@ import { Container, Form, Button, Card, Badge } from "react-bootstrap";
 import Sidebar from './sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+
 const Main = ({ userId }) => {
   const [posts, setPosts] = useState([]);
   const [newPostContent, setNewPostContent] = useState("");
