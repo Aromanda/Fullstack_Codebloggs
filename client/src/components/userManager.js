@@ -12,7 +12,7 @@ const User = (props) => (
     <td>{props.user.rating}</td>
     <td>{props.user.fee}</td>
     <td>
-      <Link className="btn btn-link" to={`/editUser/${props.user._id}`}>
+      <Link className="btn btn-link" to={`/editManager/${props.user._id}`}>
         Edit
       </Link>{" "}
       |
