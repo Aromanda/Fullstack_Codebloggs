@@ -146,7 +146,7 @@ export default function Edit() {
             },
           }}
         >
-          <h2>Confirmer la mise à jour du user</h2>
+          <h2>Confirm User's update</h2>
           <div>
             <button
               onClick={() => {
@@ -162,7 +162,7 @@ export default function Edit() {
                 cursor: "pointer",
               }}
             >
-              Oui/Confirmer
+              Yes/Confirm
             </button>
             <button
               onClick={closeConfirmationModal}
@@ -175,7 +175,7 @@ export default function Edit() {
                 cursor: "pointer",
               }}
             >
-              Non/Retour
+              No/Return
             </button>
           </div>
         </Modal>
