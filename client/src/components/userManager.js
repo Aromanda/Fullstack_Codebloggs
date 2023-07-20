@@ -7,10 +7,6 @@ const User = (props) => (
   <tr>
     <td>{props.user.first_name}</td>
     <td>{props.user.last_name}</td>
-    <td>{props.user.email}</td>
-    <td>{props.user.region}</td>
-    <td>{props.user.rating}</td>
-    <td>{props.user.fee}</td>
     <td>
       <Link className="btn btn-link" to={`/editManager/${props.user._id}`}>
         Edit
@@ -97,10 +93,6 @@ export default function UserManager() {
               <tr>
                 <th style={{ color: "blue" }}>First Name</th>
                 <th style={{ color: "red" }}>Last Name</th>
-                <th style={{ color: "blue" }}>Email</th>
-                <th style={{ color: "red" }}>Region</th>
-                <th style={{ color: "blue" }}>Rating</th>
-                <th style={{ color: "red" }}>Fee</th>
               </tr>
             </thead>
             <tbody>{userList()}</tbody>
