@@ -115,7 +115,7 @@ export default function UserManager() {
             },
           }}
         >
-          <h2>Êtes-vous sûr de vouloir continuer ?</h2>
+          <h2>Do you really want to continue?</h2>
           <div>
             <button
               style={{
@@ -132,7 +132,7 @@ export default function UserManager() {
                 closeConfirmationModal();
               }}
             >
-              Oui/Confirmer
+              Yes/Confirm
             </button>
             <button
               style={{
@@ -145,7 +145,7 @@ export default function UserManager() {
               }}
               onClick={closeConfirmationModal}
             >
-              Non/Retour
+              No/Return
             </button>
           </div>
         </Modal>
