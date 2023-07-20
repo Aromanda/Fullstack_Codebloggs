@@ -12,6 +12,7 @@ import Bloggs from "./components/bloggs";
 import Admin from "./components/admin";
 import Network from "./components/network";
 import UserManager from "./components/userManager";
+import Edit from "./components/editUser";
 import { toast } from "react-toastify";
 const App = () => {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ const App = () => {
       <Routes>
         <Route path="/create" element={<Create />} />
         <Route path="/userManager" element={<UserManager />} />
+        <Route path="/editManager/:id" element={<Edit />} />
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home userId={userId} />} />
         <Route path="/bloggs" element={<Bloggs userId={userId} />} />
