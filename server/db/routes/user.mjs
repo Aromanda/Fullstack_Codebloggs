@@ -41,6 +41,15 @@ router.patch("/:id", async (req, res) => {
   res.send(result).status(200);
 });
 
+router.put("/:id", async (req, res) => {
+  let collection = await db.collection("user");
+  const query = { _id: new ObjectId(req.params.id) };
+  const {_id, ...updateUser} = req.body
+  const updates =  { $set: updateUser };
+  let result = await collection.updateOne(query, updates);
+  res.send(result).status(200);
+});
+
 // This section will help you delete a record
 router.delete("/:id", async (req, res) => {
   const query = { _id: new ObjectId(req.params.id) };
