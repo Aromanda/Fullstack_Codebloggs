@@ -45,12 +45,12 @@ export default function UserManager() {
   }, [Users.length]);
 
   // This method will delete a user
-  async function deleteUser(id) {
-    await fetch(`http://localhost:5050/user/${id}`, {
+  async function deleteUser(_id) {
+    await fetch(`http://localhost:5050/user/${_id}`, {
       method: "DELETE",
     });
 
-    const newUsers = Users.filter((el) => el._id !== id);
+    const newUsers = Users.filter((el) => el._id !== _id);
     setUsers(newUsers);
   }
 
