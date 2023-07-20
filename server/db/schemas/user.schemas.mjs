@@ -3,10 +3,6 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    user_id: {
-    type: Schema.Types.ObjectId,
-    default: () => new mongoose.Types.ObjectId(),
-    },
   first_name: {
     type: String,
     required: true
