@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Modal from "react-modal";
 import Sidebar from "./sidebar";
 
 const User = (props) => (
@@ -21,134 +20,153 @@ const User = (props) => (
 
 export default function UserManager() {
   const [Users, setUsers] = useState([]);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [firstNameSearch, setFirstNameSearch] = useState("");
+  const [lastNameSearch, setLastNameSearch] = useState("");
+  const [sortKey, setSortKey] = useState("first_name");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // This method fetches the Users from the database.
+  const usersPerPage = 10; 
+
+  const [currentUsers, setCurrentUsers] = useState([]);
+
   useEffect(() => {
     async function getUsers() {
       const response = await fetch(`http://localhost:5050/user/`);
-
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
         window.alert(message);
         return;
       }
-
       const Users = await response.json();
       setUsers(Users);
+      // setCurrentPage(1); // Set the currentPage to 1 on initial render
+      getCurrentUsers(); // Update current users on initial render
     }
-
     getUsers();
+  }, [Users]);
 
-    return;
-  }, [Users.length]);
-
-  // This method will delete a user
   async function deleteUser(_id) {
     await fetch(`http://localhost:5050/user/${_id}`, {
       method: "DELETE",
     });
-
     const newUsers = Users.filter((el) => el._id !== _id);
     setUsers(newUsers);
+    getCurrentUsers(); // Update current users after deletion
   }
 
-  // Fonction pour ouvrir le modal de confirmation
-  function openConfirmationModal(user) {
-    setSelectedUser(user);
-    setShowConfirmationModal(true);
-  }
-
-  // Fonction pour fermer le modal de confirmation
-  function closeConfirmationModal() {
-    setSelectedUser(null);
-    setShowConfirmationModal(false);
-  }
-
-  // This method will map out the Users on the table
-  function userList() {
-    return Users.map((user) => {
-      return (
-        <User
-          user={user}
-          deleteUser={() => openConfirmationModal(user)}
-          key={user._id}
-        />
-      );
+  function sortUsers() {
+    let sortedUsers = [...Users];
+    sortedUsers.sort((a, b) => {
+      const valA = a[sortKey].toLowerCase();
+      const valB = b[sortKey].toLowerCase();
+      if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+      if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+      return 0;
     });
+    return sortedUsers;
   }
 
-  // This following section will display the table with the Users of individuals.
+  function getCurrentUsers() {
+    const sortedUsers = sortUsers();
+    let filteredUsers = sortedUsers;
+    if (firstNameSearch) {
+      filteredUsers = filteredUsers.filter((user) =>
+        user.first_name.toLowerCase().includes(firstNameSearch.toLowerCase())
+      );
+    }
+    if (lastNameSearch) {
+      filteredUsers = filteredUsers.filter((user) =>
+        user.last_name.toLowerCase().includes(lastNameSearch.toLowerCase())
+      );
+    }
+
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+    setCurrentUsers(currentUsers); // Update current users
+  }
+
+  useEffect(() => {
+    getCurrentUsers(); // Update current users on initial render and when search, sort, or page changes
+  }, [currentPage, firstNameSearch, lastNameSearch, sortKey, sortOrder]);
+
+  function handlePageChange(pageNumber) {
+    setCurrentPage(pageNumber);
+  }
+
+  function handleSort(key) {
+    setSortKey(key);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  }
+
   return (
     <div>
-      <Sidebar /> {/* Intégrer le composant Sidebar ici */}
+      <Sidebar />
       <div style={{ marginLeft: "15%", padding: "20px" }}>
-        <h3 style={{ textAlign: "center", marginTop: "40px", fontstyle: "bold", color: "blue" }}>
+        <h3 style={{ textAlign: "center", marginTop: "40px", fontWeight: "bold", color: "blue" }}>
           Users List
         </h3>
-        <div className="table-responsive">
-          <table className="table table-striped" style={{ marginTop: "40px" }}>
-            <thead className="thead-dark">
-              <tr>
-                <th style={{ color: "blue" }}>First Name</th>
-                <th style={{ color: "red" }}>Last Name</th>
-              </tr>
-            </thead>
-            <tbody>{userList()}</tbody>
-          </table>
+        <div className="search-container">
+          <label htmlFor="firstNameSearch">Search by First Name:</label>
+          <input
+            type="text"
+            id="firstNameSearch"
+            value={firstNameSearch}
+            onChange={(e) => setFirstNameSearch(e.target.value)}
+            placeholder=""
+          />
+          <label htmlFor="lastNameSearch">Search by Last Name:</label>
+          <input
+            type="text"
+            id="lastNameSearch"
+            value={lastNameSearch}
+            onChange={(e) => setLastNameSearch(e.target.value)}
+            placeholder=""
+          />
+          <button
+            onClick={() => {
+              setFirstNameSearch("");
+              setLastNameSearch("");
+            }}
+          >
+            Clear
+          </button>
         </div>
-
-        <Modal
-          isOpen={showConfirmationModal}
-          onRequestClose={closeConfirmationModal}
-          contentLabel="Confirmation Modal"
-          style={{
-            overlay: {
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-            },
-            content: {
-              width: "400px",
-              maxWidth: "90%",
-              margin: "0 auto",
-              marginBottom: "350px",
-            },
-          }}
-        >
-          <h2>Do you really want to continue?</h2>
-          <div>
-            <button
-              style={{
-                marginRight: "10px",
-                padding: "10px 20px",
-                border: "none",
-                borderRadius: "4px",
-                color: "#fff",
-                backgroundColor: "blue",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                deleteUser(selectedUser._id);
-                closeConfirmationModal();
-              }}
-            >
-              Yes/Confirm
+        <table className="table table-striped" style={{ marginTop: "40px" }}>
+          <thead className="thead-dark">
+            <tr>
+              <th onClick={() => handleSort("first_name")}>
+                First Name
+                {sortKey === "first_name" && (
+                  <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
+                )}
+              </th>
+              <th onClick={() => handleSort("last_name")}>
+                Last Name
+                {sortKey === "last_name" && (
+                  <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
+                )}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentUsers.map((user) => (
+              <User
+                user={user}
+                deleteUser={() => deleteUser(user._id)}
+                key={user._id}
+              />
+            ))}
+          </tbody>
+        </table>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          {Array.from({ length: Math.ceil(Users.length / usersPerPage) }).map((_, index) => (
+            <button key={index + 1} onClick={() => handlePageChange(index + 1)}>
+              {index + 1}
             </button>
-            <button
-              style={{
-                padding: "10px 20px",
-                border: "none",
-                borderRadius: "4px",
-                color: "#fff",
-                backgroundColor: "red",
-                cursor: "pointer",
-              }}
-              onClick={closeConfirmationModal}
-            >
-              No/Return
-            </button>
-          </div>
-        </Modal>
+          ))}
+        </div>
       </div>
     </div>
   );
