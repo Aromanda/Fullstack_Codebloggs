@@ -112,7 +112,7 @@ export default function UserManager() {
     <div>
       <Sidebar />
       <div style={{ marginLeft: "15%", padding: "20px" }}>
-        <h3 style={{ textAlign: "center", marginTop: "40px", fontWeight: "bold", color: "#8D88EA" }}>
+        <h3 style={{ textAlign: "center", marginTop: "40px", marginBottom: "40px", fontWeight: "bold", color: "#8D88EA" }}>
           Users List
         </h3>
         {/* Render the loading circle logo if data is still loading */}
