@@ -556,3 +556,16 @@ Réponse d'exemple
 
 - Server side: pas d'action
 
+---
+
+### Conception Réactive :
+
+La Conception Réactive est une approche de développement logiciel axée sur la construction de systèmes qui réagissent de manière efficiente et robuste aux changements et aux événements. Elle se concentre sur la mise en place de flux de données unidirectionnels pour permettre aux composants de communiquer et de réagir aux événements en temps réel. Cette approche met l'accent sur la réactivité, la scalabilité et la tolérance aux pannes, en utilisant des modèles de programmation asynchrones et des structures de données immuables pour garantir que les applications restent stables et performantes même en présence d'un grand nombre de requêtes concurrentes.
+
+### Conception Adaptable :
+
+La Conception Adaptable, également connue sous le nom de Conception Adaptative, est une approche de développement logiciel qui met l'accent sur la flexibilité et la capacité à s'ajuster aux changements de manière proactive. Cette approche favorise l'utilisation de modèles de conception qui permettent aux systèmes de s'adapter facilement aux nouvelles exigences et aux évolutions du marché. En mettant l'accent sur la modularité, la réutilisabilité et les interfaces bien définies, la Conception Adaptable facilite la modification, l'extension et l'intégration de nouvelles fonctionnalités sans perturber le fonctionnement général du système.
+
+### Différences entre la Conception Réactive et la Conception Adaptable :
+
+La principale différence entre la Conception Réactive et la Conception Adaptable réside dans leur approche face aux changements et aux événements. La Conception Réactive se concentre sur la réactivité en temps réel et la gestion efficace des flux de données, en utilisant des modèles asynchrones et immuables. Elle vise à garantir la stabilité et la performance des systèmes dans des environnements hautement concurrents. En revanche, la Conception Adaptable met l'accent sur la flexibilité et la capacité à s'adapter aux évolutions à venir. Elle favorise des modèles de conception qui permettent une modification aisée du système pour intégrer de nouvelles fonctionnalités ou répondre à de nouveaux besoins. Alors que la Conception Réactive privilégie la résilience face aux charges et aux demandes actuelles, la Conception Adaptable mise sur l'évolutivité pour répondre efficacement aux futurs défis et opportunités.
