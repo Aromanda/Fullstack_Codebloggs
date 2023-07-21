@@ -25,23 +25,30 @@ export default function UserManager() {
   const [sortKey, setSortKey] = useState("first_name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true); // State variable to track loading status
 
-  const usersPerPage = 10; 
+  const usersPerPage = 10;
 
   const [currentUsers, setCurrentUsers] = useState([]);
 
   useEffect(() => {
     async function getUsers() {
-      const response = await fetch(`http://localhost:5050/user/`);
-      if (!response.ok) {
-        const message = `An error occurred: ${response.statusText}`;
-        window.alert(message);
-        return;
+      try {
+        // Simulate a delay of 1.5 seconds before fetching the data
+        setTimeout(async () => {
+          const response = await fetch(`http://localhost:5050/user/`);
+          if (!response.ok) {
+            throw new Error(`An error occurred: ${response.statusText}`);
+          }
+          const Users = await response.json();
+          setUsers(Users);
+          setLoading(false); // Set loading to false when data is fetched
+          getCurrentUsers(); // Update current users on initial render
+        }, 0);
+      } catch (error) {
+        setLoading(false); // Set loading to false if there's an error
+        window.alert(error.message);
       }
-      const Users = await response.json();
-      setUsers(Users);
-      // setCurrentPage(1); // Set the currentPage to 1 on initial render
-      getCurrentUsers(); // Update current users on initial render
     }
     getUsers();
   }, [Users]);
@@ -87,12 +94,13 @@ export default function UserManager() {
     setCurrentUsers(currentUsers); // Update current users
   }
 
-  useEffect(() => {
-    getCurrentUsers(); // Update current users on initial render and when search, sort, or page changes
-  }, [currentPage, firstNameSearch, lastNameSearch, sortKey, sortOrder]);
+  // useEffect(() => {
+  //   getCurrentUsers(); // Update current users on initial render and when search, sort, or page changes
+  // }, [currentPage, firstNameSearch, lastNameSearch, sortKey, sortOrder]);
 
   function handlePageChange(pageNumber) {
     setCurrentPage(pageNumber);
+    // getCurrentUsers(); // Update current users immediately after changing the page
   }
 
   function handleSort(key) {
@@ -107,66 +115,103 @@ export default function UserManager() {
         <h3 style={{ textAlign: "center", marginTop: "40px", fontWeight: "bold", color: "blue" }}>
           Users List
         </h3>
-        <div className="search-container">
-          <label htmlFor="firstNameSearch">Search by First Name:</label>
-          <input
-            type="text"
-            id="firstNameSearch"
-            value={firstNameSearch}
-            onChange={(e) => setFirstNameSearch(e.target.value)}
-            placeholder=""
-          />
-          <label htmlFor="lastNameSearch">Search by Last Name:</label>
-          <input
-            type="text"
-            id="lastNameSearch"
-            value={lastNameSearch}
-            onChange={(e) => setLastNameSearch(e.target.value)}
-            placeholder=""
-          />
-          <button
-            onClick={() => {
-              setFirstNameSearch("");
-              setLastNameSearch("");
-            }}
-          >
-            Clear
-          </button>
-        </div>
-        <table className="table table-striped" style={{ marginTop: "40px" }}>
-          <thead className="thead-dark">
-            <tr>
-              <th onClick={() => handleSort("first_name")}>
-                First Name
-                {sortKey === "first_name" && (
-                  <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
-                )}
-              </th>
-              <th onClick={() => handleSort("last_name")}>
-                Last Name
-                {sortKey === "last_name" && (
-                  <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
-                )}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentUsers.map((user) => (
-              <User
-                user={user}
-                deleteUser={() => deleteUser(user._id)}
-                key={user._id}
+        {/* Render the loading circle logo if data is still loading */}
+        {loading ? (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            {/* Replace "Loading..." text with the loading circle SVG */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 40 40"
+              preserveAspectRatio="xMidYMid"
+              style={{
+                display: "inline-block",
+                animation: "spin 1s infinite linear",
+              }}
+            >
+              <circle
+                cx="20"
+                cy="20"
+                fill="none"
+                stroke="#8D88EA"
+                strokeWidth="4"
+                r="10"
+                strokeDasharray="39.8 13.1"
+              >
+                <animateTransform
+                  attributeName="transform"
+                  type="rotate"
+                  repeatCount="indefinite"
+                  dur="1s"
+                  values="0 20 20;360 20 20"
+                  keyTimes="0;1"
+                ></animateTransform>
+              </circle>
+            </svg>
+          </div>
+        ) : (
+          <>
+            <div className="search-container">
+              <label htmlFor="firstNameSearch">Search by First Name:</label>
+              <input
+                type="text"
+                id="firstNameSearch"
+                value={firstNameSearch}
+                onChange={(e) => setFirstNameSearch(e.target.value)}
+                placeholder=""
               />
-            ))}
-          </tbody>
-        </table>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          {Array.from({ length: Math.ceil(Users.length / usersPerPage) }).map((_, index) => (
-            <button key={index + 1} onClick={() => handlePageChange(index + 1)}>
-              {index + 1}
-            </button>
-          ))}
-        </div>
+              <label htmlFor="lastNameSearch">Search by Last Name:</label>
+              <input
+                type="text"
+                id="lastNameSearch"
+                value={lastNameSearch}
+                onChange={(e) => setLastNameSearch(e.target.value)}
+                placeholder=""
+              />
+              <button
+                onClick={() => {
+                  setFirstNameSearch("");
+                  setLastNameSearch("");
+                }}
+              >
+                Clear
+              </button>
+            </div>
+            <table className="table table-striped" style={{ marginTop: "40px" }}>
+              <thead className="thead-dark">
+                <tr>
+                  <th onClick={() => handleSort("first_name")}>
+                    First Name
+                    {sortKey === "first_name" && (
+                      <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
+                    )}
+                  </th>
+                  <th onClick={() => handleSort("last_name")}>
+                    Last Name
+                    {sortKey === "last_name" && (
+                      <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
+                    )}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentUsers.map((user) => (
+                  <User
+                    user={user}
+                    deleteUser={() => deleteUser(user._id)}
+                    key={user._id}
+                  />
+                ))}
+              </tbody>
+            </table>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              {Array.from({ length: Math.ceil(Users.length / usersPerPage) }).map((_, index) => (
+                <button key={index + 1} onClick={() => handlePageChange(index + 1)}>
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
