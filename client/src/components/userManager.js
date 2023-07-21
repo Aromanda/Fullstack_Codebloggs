@@ -112,7 +112,7 @@ export default function UserManager() {
     <div>
       <Sidebar />
       <div style={{ marginLeft: "15%", padding: "20px" }}>
-        <h3 style={{ textAlign: "center", marginTop: "40px", fontWeight: "bold", color: "blue" }}>
+        <h3 style={{ textAlign: "center", marginTop: "40px", fontWeight: "bold", color: "#8D88EA" }}>
           Users List
         </h3>
         {/* Render the loading circle logo if data is still loading */}
@@ -126,6 +126,8 @@ export default function UserManager() {
               style={{
                 display: "inline-block",
                 animation: "spin 1s infinite linear",
+                width: "300px",   // Set the width to 20px
+                height: "300px",  // Set the height to 20px
               }}
             >
               <circle
@@ -159,7 +161,7 @@ export default function UserManager() {
                 onChange={(e) => setFirstNameSearch(e.target.value)}
                 placeholder=""
               />
-              <label htmlFor="lastNameSearch">Search by Last Name:</label>
+              <label htmlFor="lastNameSearch" >Search by Last Name:</label>
               <input
                 type="text"
                 id="lastNameSearch"
@@ -167,11 +169,11 @@ export default function UserManager() {
                 onChange={(e) => setLastNameSearch(e.target.value)}
                 placeholder=""
               />
-              <button
-                onClick={() => {
+              <button onClick={() => {
                   setFirstNameSearch("");
                   setLastNameSearch("");
                 }}
+                style={{ background: "#8D88EA", color:"white" }}
               >
                 Clear
               </button>
@@ -179,13 +181,13 @@ export default function UserManager() {
             <table className="table table-striped" style={{ marginTop: "40px" }}>
               <thead className="thead-dark">
                 <tr>
-                  <th onClick={() => handleSort("first_name")}>
+                  <th onClick={() => handleSort("first_name")} style={{ color: "#8D88EA" }}>
                     First Name
                     {sortKey === "first_name" && (
                       <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
                     )}
                   </th>
-                  <th onClick={() => handleSort("last_name")}>
+                  <th onClick={() => handleSort("last_name")} style={{ color: "#8D88EA" }}>
                     Last Name
                     {sortKey === "last_name" && (
                       <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
@@ -205,8 +207,8 @@ export default function UserManager() {
             </table>
             <div style={{ display: "flex", justifyContent: "center" }}>
               {Array.from({ length: Math.ceil(Users.length / usersPerPage) }).map((_, index) => (
-                <button key={index + 1} onClick={() => handlePageChange(index + 1)}>
-                  {index + 1}
+                <button key={index + 1} onClick={() => handlePageChange(index + 1)} style={{ background: "#8D88EA", color:"white" }}>
+                  {index + 1} 
                 </button>
               ))}
             </div>
