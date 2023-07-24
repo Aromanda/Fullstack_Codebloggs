@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Card, Row, Col } from "react-bootstrap";
 import Sidebar from './sidebar';
+
 const Main = ({ userId }) => {
   const [newPostContent, setNewPostContent] = useState("");
   const [user, setUser] = useState({});
@@ -91,7 +92,6 @@ const Main = ({ userId }) => {
         <Col md={7} style={{ marginTop: '2%', marginLeft: '6%',marginRight: '6%', height: '50vh', width: '40%' }}>
           <div style={{ padding: "20px" }}>
             <h1>Welcome to the Home Page!</h1>
-            <h2>UserID: {userId}</h2>
             <Row>
               <Col>
                 <Card style={{ width: '100%' }}>
