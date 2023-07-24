@@ -1,0 +1,70 @@
+/* main.css */
+
+/* Fullscreen mode */
+.user-info-col {
+    margin-top: 2%;
+    margin-left: 15%; /* Adjusted to move the container a bit to the right */
+    margin-right: 5%;
+    height: 50vh;
+    width: 35%;
+}
+
+.user-info-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.user-avatar {
+    background-color: black;
+    color: white;
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.user-details h3 {
+    margin-top: 0;
+}
+
+/* Phone mode */
+@media (max-width: 768px) {
+    .user-info-col {
+      margin-top: 2%;
+      margin-left: 10%; /* Adjusted to move the container a bit to the right */
+      margin-right: 3%;
+      width: 94%;
+      text-align: center;
+    }
+
+    .user-info-container {
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      word-wrap: break-word;
+    }
+
+    .user-avatar {
+      background-color: black;
+      color: white;
+      width: 100px;
+      height: 100px;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0 auto;
+      margin-bottom: 15px;
+    }
+
+    .user-details h3 {
+      margin-top: 0;
+    }
+}

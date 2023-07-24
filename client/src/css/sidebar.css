@@ -1,0 +1,62 @@
+/* sidebar.css */
+
+.sidebar-container {
+    position: relative;
+  }
+  
+  .show-sidebar {
+    width: 15%;
+  }
+  
+  /* New styles for hiding the sidebar on phone mode */
+  .hide-sidebar .sidebar {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    .show-sidebar {
+      width: 100%;
+      position: static;
+    }
+    
+    .mobile .navbar {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    
+    .mobile .nav-link {
+      padding: 10px 15px;
+    }
+    
+    .mobile .navbar-icon {
+      display: block;
+      cursor: pointer;
+    }
+  
+    .mobile .icon-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background-color: black;
+      height: 56px;
+    }
+  
+    .mobile .icon-bar a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      text-decoration: none;
+      padding: 6px;
+    }
+  
+    .mobile .icon-bar a:hover {
+      color: #CCCCCC;
+    }
+  
+    .mobile .sidebar {
+      display: none;
+    }
+  }
