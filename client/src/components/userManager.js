@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "./sidebar";
-import ReactModal from "react-modal";
 
 const User = (props) => (
   <tr>
@@ -27,11 +26,10 @@ export default function UserManager() {
   const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true); // State variable to track loading status
-  const [currentUsers, setCurrentUsers] = useState([]);
 
   const usersPerPage = 10;
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+
+  const [currentUsers, setCurrentUsers] = useState([]);
 
   useEffect(() => {
     async function getUsers() {
@@ -46,14 +44,14 @@ export default function UserManager() {
           setUsers(Users);
           setLoading(false); // Set loading to false when data is fetched
           getCurrentUsers(); // Update current users on initial render
-        }, 1500); // Simulate 1.5 seconds delay
+        }, 0);
       } catch (error) {
         setLoading(false); // Set loading to false if there's an error
         window.alert(error.message);
       }
     }
     getUsers();
-  }, []);
+  }, [Users]);
 
   async function deleteUser(_id) {
     await fetch(`http://localhost:5050/user/${_id}`, {
@@ -62,28 +60,6 @@ export default function UserManager() {
     const newUsers = Users.filter((el) => el._id !== _id);
     setUsers(newUsers);
     getCurrentUsers(); // Update current users after deletion
-  }
-
-  function openConfirmationModal(user) {
-    setSelectedUser(user);
-    setShowConfirmationModal(true);
-  }
-
-  function closeConfirmationModal() {
-    setSelectedUser(null);
-    setShowConfirmationModal(false);
-  }
-
-  function userList() {
-    return Users.map((user) => {
-      return (
-        <User
-          user={user}
-          deleteUser={() => openConfirmationModal(user)}
-          key={user._id}
-        />
-      );
-    });
   }
 
   function sortUsers() {
@@ -118,8 +94,13 @@ export default function UserManager() {
     setCurrentUsers(currentUsers); // Update current users
   }
 
+  // useEffect(() => {
+  //   getCurrentUsers(); // Update current users on initial render and when search, sort, or page changes
+  // }, [currentPage, firstNameSearch, lastNameSearch, sortKey, sortOrder]);
+
   function handlePageChange(pageNumber) {
     setCurrentPage(pageNumber);
+    // getCurrentUsers(); // Update current users immediately after changing the page
   }
 
   function handleSort(key) {
@@ -131,11 +112,13 @@ export default function UserManager() {
     <div>
       <Sidebar />
       <div style={{ marginLeft: "15%", padding: "20px" }}>
-        <h3 style={{ textAlign: "center", marginTop: "40px", marginBottom: "40px", fontWeight: "bold", color: "#8D88EA" }}>
+      <h3 style={{ textAlign: "center", marginTop: "40px", marginBottom: "40px", fontWeight: "bold", color: "#8D88EA" }}>
           Users List
-        </h3>
+       </h3>
+        {/* Render the loading circle logo if data is still loading */}
         {loading ? (
           <div style={{ display: "flex", justifyContent: "center" }}>
+            {/* Replace "Loading..." text with the loading circle SVG */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 40 40"
@@ -143,8 +126,8 @@ export default function UserManager() {
               style={{
                 display: "inline-block",
                 animation: "spin 1s infinite linear",
-                width: "300px",
-                height: "300px",
+                width: "300px",   // Set the width to 20px
+                height: "300px",  // Set the height to 20px
               }}
             >
               <circle
@@ -191,7 +174,7 @@ export default function UserManager() {
                   setFirstNameSearch("");
                   setLastNameSearch("");
                 }}
-                style={{ background: "#8D88EA", color: "white" }}
+                style={{ background: "#8D88EA", color:"white" }}
               >
                 Clear
               </button>
@@ -199,7 +182,7 @@ export default function UserManager() {
             <table className="table table-striped" style={{ marginTop: "40px" }}>
               <thead className="thead-dark">
                 <tr>
-                  <th onClick={() => handleSort("first_name")} style={{ color: "#8D88EA" }}>
+                <th onClick={() => handleSort("first_name")} style={{ color: "#8D88EA" }}>
                     First Name
                     {sortKey === "first_name" && (
                       <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
@@ -213,67 +196,23 @@ export default function UserManager() {
                   </th>
                 </tr>
               </thead>
-              <tbody>{userList()}</tbody>
+              <tbody>
+                {currentUsers.map((user) => (
+                  <User
+                    user={user}
+                    deleteUser={() => deleteUser(user._id)}
+                    key={user._id}
+                  />
+                ))}
+              </tbody>
             </table>
             <div style={{ display: "flex", justifyContent: "center" }}>
               {Array.from({ length: Math.ceil(Users.length / usersPerPage) }).map((_, index) => (
-                <button key={index + 1} onClick={() => handlePageChange(index + 1)} style={{ background: "#8D88EA", color: "white" }}>
+                <button key={index + 1} onClick={() => handlePageChange(index + 1)} style={{ background: "#8D88EA", color:"white" }}>
                   {index + 1}
                 </button>
               ))}
             </div>
-
-            {/* Render the delete confirmation modal */}
-            <ReactModal
-              isOpen={showConfirmationModal}
-              onRequestClose={closeConfirmationModal}
-              contentLabel="Confirmation Modal"
-              style={{
-                overlay: {
-                  backgroundColor: "rgba(0, 0, 0, 0.5)",
-                },
-                content: {
-                  width: "400px",
-                  maxWidth: "90%",
-                  margin: "0 auto",
-                  marginBottom: "350px",
-                },
-              }}
-            >
-              <h2>Do you really want to continue?</h2>
-              <div>
-                <button
-                  style={{
-                    marginRight: "10px",
-                    padding: "10px 20px",
-                    border: "none",
-                    borderRadius: "4px",
-                    color: "#fff",
-                    backgroundColor: "blue",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    deleteUser(selectedUser._id);
-                    closeConfirmationModal();
-                  }}
-                >
-                  Yes/Confirm
-                </button>
-                <button
-                  style={{
-                    padding: "10px 20px",
-                    border: "none",
-                    borderRadius: "4px",
-                    color: "#fff",
-                    backgroundColor: "red",
-                    cursor: "pointer",
-                  }}
-                  onClick={closeConfirmationModal}
-                >
-                  No/Return
-                </button>
-              </div>
-            </ReactModal>
           </>
         )}
       </div>
