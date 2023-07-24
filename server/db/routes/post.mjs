@@ -3,9 +3,12 @@ import db from "../conn.mjs";
 import cors from "cors";
 import { ObjectId } from "mongodb";
 import PostSchemas from "../schemas/post.schemas.mjs";
+
 const router = express.Router();
 router.use(cors());
+
 const collection = db.collection("post");
+
 // Create a new post
 router.post("/", async (req, res) => {
   try {
@@ -16,7 +19,7 @@ router.post("/", async (req, res) => {
     const result = await collection.insertOne(newPost);
     const response = {
       user_id: req.body.user_id,
-      post: result
+      post: result,
     };
     console.log(response);
     res.status(201).json({ message: "Post created successfully", response });
@@ -25,41 +28,47 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Failed to create the post" });
   }
 });
-router.get('/:userID', async (req, res) => {
+
+// Retrieve posts based on a date range
+router.get("/", async (req, res) => {
   try {
-    const { userID } = req.params;
-    console.log(userID);
-    const collection = db.collection('post');
-    let query = { user_id: new ObjectId(userID) };
+    const { fromDate, toDate } = req.query;
+    const collection = db.collection("post");
+    let query = {};
+
+    if (fromDate && toDate) {
+      // Convert fromDate and toDate to JavaScript Date objects
+      const fromDateObj = new Date(fromDate);
+      const toDateObj = new Date(toDate);
+      // Adjust the toDate to include the full day
+      toDateObj.setDate(toDateObj.getDate() + 1);
+
+      // Add the date range condition to the query
+      query = {
+        time_stamp: {
+          $gte: fromDateObj.toISOString(),
+          $lt: toDateObj.toISOString(),
+        },
+      };
+    }
+
     let result = await collection.find(query).toArray();
     console.log(result);
-    // Send the comments as a response
+    // Send the posts as a response
     res.status(200).json({ result });
   } catch (error) {
     // Send an error response if there's any issue
     console.error(error);
-    res.status(500).json({ message: 'An error occurred while retrieving the comments.' });
+    res.status(500).json({ message: "An error occurred while retrieving the posts." });
   }
 });
-router.get('/', async (req, res) => {
-  try {
-    const collection = db.collection('post');
-    let result = await collection.find({}).toArray();
-    console.log(result);
-    // Send the comments as a response
-    res.status(200).json({ result });
-  } catch (error) {
-    // Send an error response if there's any issue
-    console.error(error);
-    res.status(500).json({ message: 'An error occurred while retrieving the comments.' });
-  }
-});
+
 router.patch("/:postId", async (req, res) => {
   try {
     const collection = db.collection("post");
     const postId = req.params.postId;
     const query = { _id: new ObjectId(postId) };
-    const update = { $set: { likes: req.body.likes } };  // Update likes with new value from request body
+    const update = { $set: { likes: req.body.likes } }; // Update likes with new value from request body
     const result = await collection.updateOne(query, update);
     const updatedPost = await collection.findOne(query);
     const comments = await collection.aggregate(/* ... */).toArray();
@@ -69,4 +78,31 @@ router.patch("/:postId", async (req, res) => {
     res.status(500).json({ error: "Failed to update likes" });
   }
 });
+
+router.delete("/:postId", async (req, res) => {
+  try {
+    const postId = req.params.postId;
+
+    // Delete the post
+    const postDeleteResult = await collection.deleteOne({ _id: new ObjectId(postId) });
+
+    if (postDeleteResult.deletedCount === 0) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // Delete the associated comments
+    const commentCollection = db.collection("post");
+    const commentDeleteResult = await commentCollection.deleteMany({ post_id: new ObjectId(postId) });
+
+    res.status(200).json({
+      message: "Post and associated comments deleted successfully",
+      postDeletedCount: postDeleteResult.deletedCount,
+      commentDeletedCount: commentDeleteResult.deletedCount,
+    });
+  } catch (error) {
+    console.error("Error deleting the post:", error);
+    res.status(500).json({ error: "Failed to delete the post" });
+  }
+});
+
 export default router;

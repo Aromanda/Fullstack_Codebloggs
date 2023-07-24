@@ -70,25 +70,6 @@ router.post("/session", async (req, res) => {
   }
 });
 
-// router.get('/validate_token', async (req, res) => {
-//   const token = req.query.token;
-//   console.log('Token:', token);
-
-//   let collection = await db.collection('session');
-
-//   let query = { cookie: token };
-//   // console.log('Query:', query);
-
-//   let result = await collection.findOne(query);
-//   // console.log('Result:', result);
-
-//   if (!result) {
-//       res.status(404).json({ error: 'Token not found.' });
-//   } else {
-//       res.status(200).json({ message: 'Token is valid.', userId: result.userId, email: result.email });
-//   }
-// });
-
 router.get('/validate_token', async (req, res) => {
   const token = req.query.token;
   console.log('Token:', token);

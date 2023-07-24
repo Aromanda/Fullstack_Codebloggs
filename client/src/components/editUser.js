@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import Modal from "react-modal";
-import Sidebar from "./sidebar"; // Make sure to provide the correct path to Sidebar.js
+
 
 export default function Edit() {
   const [form, setForm] = useState({
@@ -82,8 +82,7 @@ export default function Edit() {
 
   return (
     <div>
-      {/* Sidebar component */}
-      <Sidebar authLevel="admin" />
+
 
       {/* Main content */}
       <div style={{ marginLeft: "15%", display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>

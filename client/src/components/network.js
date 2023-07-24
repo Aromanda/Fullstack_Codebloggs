@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import Sidebar from "./sidebar";
+import "../css/network.css"
+
 const Main = ({ userId }) => {
   const [userData, setUserData] = useState([]);
   const [userPostData, setUserPostData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -17,6 +20,7 @@ const Main = ({ userId }) => {
     };
     fetchUserData();
   }, []);
+  
   const getInitials = (name) => {
     if (!name) {
       return "";
@@ -28,6 +32,7 @@ const Main = ({ userId }) => {
       .toUpperCase();
     return initials;
   };
+  
   useEffect(() => {
     if (userData.length > 0) {
       const posts = userData.map(async user => {
@@ -35,10 +40,7 @@ const Main = ({ userId }) => {
           const response = await fetch(`http://localhost:5050/post/${user._id}`);
           if (response.ok) {
             const data = await response.json();
-            // Assuming 'data.result' is an array of posts
-            // Sorting the posts in descending order by timestamp
             data.result.sort((a, b) => new Date(b.time_stamp) - new Date(a.time_stamp));
-            // Now 'data.result[0]' should give you the most recent (last) post
             return { ...user, lastPost: data.result[0] };
           } else {
             console.error(`Failed to fetch posts for user ${user._id}. Please try again.`);
@@ -55,6 +57,7 @@ const Main = ({ userId }) => {
         .finally(() => setIsLoading(false));
     }
   }, [userData]);
+  
   return (
     <Container fluid style={{ backgroundColor: "#8D88EA", height: "100vh", padding: 0 }}>
       <Row>
@@ -66,7 +69,7 @@ const Main = ({ userId }) => {
             <h1>Welcome to the network Page!</h1>
             <Row>
               {userPostData.map((user) => (
-                <Col key={user._id} xs={4} style={{ marginBottom: "20px" }}>
+                <Col key={user._id} xs={12} sm={6} md={4} style={{ marginBottom: "20px" }}>
                   <Card>
                     <Card.Body>
                       <Row>
@@ -134,4 +137,5 @@ const Main = ({ userId }) => {
     </Container>
   );
 };
+
 export default Main;
