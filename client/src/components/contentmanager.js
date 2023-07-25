@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Row, Col, Button, Spinner } from "react-bootstrap";
-
+import { Container, Card, Row, Col, Button, Spinner, Modal } from "react-bootstrap";
 
 const Main = ({ userId }) => {
   const [posts, setPosts] = useState([]);
@@ -11,6 +10,8 @@ const Main = ({ userId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchFromDate, setSearchFromDate] = useState("");
   const [searchToDate, setSearchToDate] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
   const postsPerPage = 10;
 
   useEffect(() => {
@@ -60,7 +61,17 @@ const Main = ({ userId }) => {
   }, [userId]);
 
   async function handleDelete(postId) {
-    const response = await fetch(`http://localhost:5050/post/${postId}`, {
+    setPostToDelete(postId);
+    setShowModal(true);
+  }
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  async function handleDeleteConfirmed() {
+    closeModal();
+    const response = await fetch(`http://localhost:5050/post/${postToDelete}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -68,7 +79,9 @@ const Main = ({ userId }) => {
     });
 
     if (response.ok) {
-      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postToDelete));
+      setPostToDelete(null);
+      window.alert("Post successfully deleted!");
     } else {
       console.error("Failed to delete the post. Please try again.");
     }
@@ -135,6 +148,8 @@ const Main = ({ userId }) => {
               <Spinner animation="border" />
               <h3>Loading...</h3>
             </div>
+          ) : posts.length === 0 ? (
+            <div className="text-center">No posts found.</div>
           ) : (
             currentPosts.map((post) => (
               <Card key={post._id} className="mb-3">
@@ -154,7 +169,8 @@ const Main = ({ userId }) => {
                           marginRight: "10px",
                         }}
                       >
-                        {users[post.user_id] ? `${users[post.user_id].first_name[0]}${users[post.user_id].last_name[0]}` : "??"}
+                        {users[post.user_id] ? `${users[post.user_id].first_name[0]}${users[post.user_id].last_name[0]}` : "??"
+                        }
                       </div>
                       <span style={{ fontWeight: "bold" }}>
                         {users[post.user_id]
@@ -190,7 +206,7 @@ const Main = ({ userId }) => {
               </Card>
             ))
           )}
-          {!isLoading && (
+          {!isLoading && posts.length > 0 && (
             <nav>
               <ul className="pagination">
                 {Array(Math.ceil(posts.length / postsPerPage))
@@ -207,6 +223,21 @@ const Main = ({ userId }) => {
           )}
         </Col>
       </Row>
+      {/* Modal */}
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this post?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteConfirmed}>
+            Yes, Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
