@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import Sidebar from "./sidebar";
-import "../css/network.css"
+import "../css/network.css";
 
 const Main = ({ userId }) => {
   const [userData, setUserData] = useState([]);
-  const [userPostData, setUserPostData] = useState([]);
+  const [userLastPosts, setUserLastPosts] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -20,44 +20,56 @@ const Main = ({ userId }) => {
     };
     fetchUserData();
   }, []);
-  
+
+  useEffect(() => {
+    if (userData.length > 0) {
+      const fetchLastPosts = async () => {
+        const lastPosts = {};
+        for (const user of userData) {
+          try {
+            const response = await fetch(`http://localhost:5050/post?user_id=${user._id}`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            if (response.ok) {
+              const data = await response.json();
+              console.log(`User ${user._id} posts:`, data); // Log the data received
+              if (!Array.isArray(data.result)) {
+                console.warn(`Invalid data format for user ${user._id}. Expected an array.`);
+                lastPosts[user._id] = null;
+              } else {
+                const validPosts = data.result.filter((post) => post.content && post.user_id === user._id);
+                validPosts.sort((a, b) => new Date(b.time_stamp) - new Date(a.time_stamp));
+                lastPosts[user._id] = validPosts.length > 0 ? validPosts[0] : null;
+              }
+            } else {
+              console.error(`Failed to fetch posts for user ${user._id}. Please try again.`);
+              lastPosts[user._id] = null;
+            }
+          } catch (error) {
+            console.error(error);
+            lastPosts[user._id] = null;
+          }
+        }
+        setUserLastPosts(lastPosts);
+        setIsLoading(false);
+      };
+
+      fetchLastPosts();
+    }
+  }, [userData]);
+
   const getInitials = (name) => {
     if (!name) {
       return "";
     }
     const names = name.split(" ");
-    const initials = names
-      .map((n) => n.charAt(0))
-      .join("")
-      .toUpperCase();
+    const initials = names.map((n) => n.charAt(0)).join("").toUpperCase();
     return initials;
   };
-  
-  useEffect(() => {
-    if (userData.length > 0) {
-      const posts = userData.map(async user => {
-        try {
-          const response = await fetch(`http://localhost:5050/post/${user._id}`);
-          if (response.ok) {
-            const data = await response.json();
-            data.result.sort((a, b) => new Date(b.time_stamp) - new Date(a.time_stamp));
-            return { ...user, lastPost: data.result[0] };
-          } else {
-            console.error(`Failed to fetch posts for user ${user._id}. Please try again.`);
-            return user;
-          }
-        } catch (error) {
-          console.error(error);
-          return user;
-        }
-      });
-      Promise.all(posts)
-        .then(results => setUserPostData(results))
-        .catch(error => console.error(error))
-        .finally(() => setIsLoading(false));
-    }
-  }, [userData]);
-  
+
   return (
     <Container fluid style={{ backgroundColor: "#8D88EA", height: "100vh", padding: 0 }}>
       <Row>
@@ -68,7 +80,7 @@ const Main = ({ userId }) => {
           <div style={{ padding: "20px" }}>
             <h1>Welcome to the network Page!</h1>
             <Row>
-              {userPostData.map((user) => (
+              {userData.map((user) => (
                 <Col key={user._id} xs={12} sm={6} md={4} style={{ marginBottom: "20px" }}>
                   <Card>
                     <Card.Body>
@@ -113,14 +125,14 @@ const Main = ({ userId }) => {
                             <p>Loading...</p>
                           ) : (
                             <>
-                              {user.lastPost ? (
+                              {userLastPosts[user._id] ? (
                                 <Card.Text>
-                                  <strong>Timestamp:</strong> {user.lastPost.time_stamp}
+                                  <strong>Timestamp:</strong> {userLastPosts[user._id].time_stamp}
                                   <br />
-                                  <strong>Content:</strong> {user.lastPost.content}
+                                  <strong>Content:</strong> {userLastPosts[user._id].content}
                                 </Card.Text>
                               ) : (
-                                <p>No post available.</p>
+                                <p>No content yet!</p>
                               )}
                             </>
                           )}

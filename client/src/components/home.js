@@ -1,27 +1,8 @@
-// Main.js
-
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Card, Row, Col } from "react-bootstrap";
 import Sidebar from './sidebar';
 import '../css/main.css';
 import { FaThumbsUp } from "react-icons/fa";
-
-// Utility function for fetching posts from the API
-async function fetchPosts() {
-  try {
-    const response = await fetch("http://localhost:5050/post/");
-    if (response.ok) {
-      const data = await response.json();
-      return data.result;
-    } else {
-      console.log("Failed to fetch posts. Please try again.");
-      return [];
-    }
-  } catch (error) {
-    console.log("Error fetching posts:", error);
-    return [];
-  }
-}
 
 const Main = ({ userId }) => {
   const [newPostContent, setNewPostContent] = useState("");
@@ -33,88 +14,99 @@ const Main = ({ userId }) => {
   const [postAuthors, setPostAuthors] = useState({});
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5050/user/${userId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data);
+        // Fetch user data
+        const userResponse = await fetch(`http://localhost:5050/user/${userId}`);
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          setUser(userData);
         } else {
           console.log("Error fetching the user details");
         }
+
+        // Fetch posts data
+        const postsData = await fetchPosts();
+        setPosts(postsData);
+        postsData.forEach((post) => {
+          fetchComments(post._id);
+          fetchPostAuthor(post.user_id);
+          setPostLikes((prevLikes) => ({ ...prevLikes, [post._id]: post.likes }));
+        });
       } catch (error) {
-        console.log("Error fetching the user details:", error);
+        console.log("Error fetching data:", error);
       }
     };
 
-    const fetchPostsData = async () => {
-      const data = await fetchPosts();
-      setPosts(data);
-      data.forEach((post) => {
-        fetchComments(post._id);
-        fetchPostAuthor(post.user_id);
-        setPostLikes((prevLikes) => ({ ...prevLikes, [post._id]: post.likes }));
-      });
-    };
+    // Call fetchData on initial load
+    fetchData();
 
-    const fetchComments = async (postId) => {
-      try {
-        const response = await fetch(`http://localhost:5050/comment/${postId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setComments((prevComments) => ({ ...prevComments, [postId]: data.result }));
-          data.result.forEach((comment) => fetchCommentAuthor(comment.user_id));
-        } else {
-          console.log("Failed to fetch comments. Please try again.");
-        }
-      } catch (error) {
-        console.log("Error fetching comments:", error);
-      }
-    };
+    // Set up the interval to refresh data every 1 second
+    const interval = setInterval(fetchData, 1000);
 
-    const fetchPostAuthor = async (postUserId) => {
-      try {
-        const response = await fetch(`http://localhost:5050/user/${postUserId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setPostAuthors((prevAuthors) => ({ ...prevAuthors, [postUserId]: `${data.first_name} ${data.last_name}` }));
-        } else {
-          console.log("Failed to fetch post author. Please try again.");
-        }
-      } catch (error) {
-        console.log("Error fetching post author:", error);
-      }
-    };
-
-    const fetchCommentAuthor = async (commentUserId) => {
-      try {
-        const response = await fetch(`http://localhost:5050/user/${commentUserId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setCommentAuthors((prevAuthors) => ({ ...prevAuthors, [commentUserId]: `${data.first_name} ${data.last_name}` }));
-        } else {
-          console.log("Failed to fetch comment author. Please try again.");
-        }
-      } catch (error) {
-        console.log("Error fetching comment author:", error);
-      }
-    };
-
-    fetchUser();
-    fetchPostsData();
-
-    const interval = setInterval(() => {
-      fetchUser();
-      fetchPostsData();
-    }, 5000);
-
+    // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
   }, [userId]);
 
-  const getInitials = (name) => {
-    let initials = name.match(/\b\w/g) || [];
-    return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
-  };
+  // Utility function for fetching posts from the API
+  async function fetchPosts() {
+    try {
+      const response = await fetch("http://localhost:5050/post/");
+      if (response.ok) {
+        const data = await response.json();
+        return data.result;
+      } else {
+        console.log("Failed to fetch posts. Please try again.");
+        return [];
+      }
+    } catch (error) {
+      console.log("Error fetching posts:", error);
+      return [];
+    }
+  }
+
+  async function fetchComments(postId) {
+    try {
+      const response = await fetch(`http://localhost:5050/comment/${postId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setComments((prevComments) => ({ ...prevComments, [postId]: data.result }));
+        data.result.forEach((comment) => fetchCommentAuthor(comment.user_id));
+      } else {
+        console.log("Failed to fetch comments. Please try again.");
+      }
+    } catch (error) {
+      console.log("Error fetching comments:", error);
+    }
+  }
+
+  async function fetchPostAuthor(postUserId) {
+    try {
+      const response = await fetch(`http://localhost:5050/user/${postUserId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setPostAuthors((prevAuthors) => ({ ...prevAuthors, [postUserId]: `${data.first_name} ${data.last_name}` }));
+      } else {
+        console.log("Failed to fetch post author. Please try again.");
+      }
+    } catch (error) {
+      console.log("Error fetching post author:", error);
+    }
+  }
+
+  async function fetchCommentAuthor(commentUserId) {
+    try {
+      const response = await fetch(`http://localhost:5050/user/${commentUserId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setCommentAuthors((prevAuthors) => ({ ...prevAuthors, [commentUserId]: `${data.first_name} ${data.last_name}` }));
+      } else {
+        console.log("Failed to fetch comment author. Please try again.");
+      }
+    } catch (error) {
+      console.log("Error fetching comment author:", error);
+    }
+  }
 
   async function handleSubmitPost() {
     const timeStamp = new Date().toISOString();
@@ -152,9 +144,19 @@ const Main = ({ userId }) => {
     }
   }
 
-  const userLikedPost = (postId) => {
+  function getInitials(name) {
+    let initials = name.match(/\b\w/g) || [];
+    return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+  }
+
+  function formatDateWithHours(timestamp) {
+    const options = { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" };
+    return new Date(timestamp).toLocaleDateString(undefined, options);
+  }
+
+  function userLikedPost(postId) {
     return postLikes[postId] > 0; // Assuming that a positive number of likes means the user has liked the post
-  };
+  }
 
   return (
     <Container fluid style={{ backgroundColor: "#8D88EA", height: "100vh", padding: 0 }}>
@@ -195,8 +197,7 @@ const Main = ({ userId }) => {
 
         {/* Activity Feed Container */}
         <Col md={4} className="activity-feed-col">
-          <br>
-          </br>
+          <br />
           <Form onSubmit={e => { e.preventDefault(); handleSubmitPost(); }}>
             <Form.Group controlId="newPostContent">
               <Form.Control as="textarea" rows={3} value={newPostContent} onChange={e => setNewPostContent(e.target.value)} placeholder="What's on your mind?" />
@@ -210,7 +211,7 @@ const Main = ({ userId }) => {
             <Card key={post._id} style={{ marginBottom: '1em' }}>
               <Card.Body>
                 <Card.Title>
-                  {postAuthors[post.user_id]} <small className="text-muted">{new Date(post.time_stamp).toLocaleDateString()}</small>
+                  {postAuthors[post.user_id]} <small className="text-muted">{formatDateWithHours(post.time_stamp)}</small>
                 </Card.Title>
                 <Card.Text>
                   {post.content}

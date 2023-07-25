@@ -5,13 +5,37 @@ import "bootstrap/dist/css/bootstrap.css";
 import Cookies from "js-cookie";
 
 export default function MyNavbar(props) {
-  const {userId}=props
-  console.log(userId)
+  const { userId } = props;
   const [agentName, setAgentName] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [newPostContent, setNewPostContent] = useState("");
+  const [showAccountSettingsModal, setShowAccountSettingsModal] = useState(false);
+
+  // Define styles
+  const logoStyle = {
+    width: "30%",
+    cursor: "pointer",
+  };
+
+  const postButtonStyle = {
+    backgroundColor: "#8D88EA",
+    color: "white",
+    fontSize: "20px",
+    padding: "10px 120px",
+    marginRight: "auto",
+  };
+
+  const modalContainerStyle = {
+    backgroundColor: "#F8F9FA",
+  };
+
+  const submitButtonStyle = {
+    backgroundColor: "black",
+    color: "white",
+  };
+
   useEffect(() => {
     async function fetchAgentData() {
       const response = await fetch("http://localhost:5050/user/");
@@ -28,19 +52,39 @@ export default function MyNavbar(props) {
     }
     fetchAgentData();
   }, []);
+
+  const handleLogoClick = () => {
+    if (location.pathname === "/" || location.pathname === "/create") {
+      return; // Do nothing when on the "/" or "/create" path
+    }
+    navigate("/home"); // Redirect to "/home" for other paths
+  };
+
   const handleModalOpen = () => setShowModal(true);
   const handleModalClose = () => setShowModal(false);
   const handlePostContentChange = (event) => setNewPostContent(event.target.value);
+
   async function handleLogout() {
-    // await fetch("http://localhost:5050/logout", { method: "POST", credentials: "include" });
     sessionStorage.clear();
-    Cookies.remove('connect.sid');
+    Cookies.remove("connect.sid");
     document.cookie = "connect.sid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     navigate("/");
   }
+
   const handleAccountSettings = () => {
-    alert("This function will be up shortly!!!");
+    setShowAccountSettingsModal(true);
   };
+
+  const handleAccountSettingsClose = () => {
+    setShowAccountSettingsModal(false);
+  };
+
+  const handleSaveChanges = () => {
+    // Perform actions to save the changes here
+    alert("Settings updated successfully!");
+    setShowAccountSettingsModal(false); // Close the modal after saving changes
+  };
+
   async function handleSubmitPost() {
     console.log(newPostContent);
     try {
@@ -49,7 +93,7 @@ export default function MyNavbar(props) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ content: newPostContent, user_id: userId }), // Include the userId in the request body
+        body: JSON.stringify({ content: newPostContent, user_id: userId }),
       });
       if (response.ok) {
         console.log("Post submitted successfully");
@@ -62,37 +106,19 @@ export default function MyNavbar(props) {
     handleModalClose();
     setNewPostContent("");
   }
-  const isLoginPage = location.pathname === "/login";
-  const isCreatePage = location.pathname === "/create";
-  const isMainPage = location.pathname === "/main";
-  const isBloggsPage = location.pathname === "/bloggs";
-  const isNetworkPage = location.pathname === "/network";
-  let logoStyle = {
-    width: "30%",
-  };
-  if (isLoginPage || isCreatePage) {
-    logoStyle.width = "50%";
-  } else if (isMainPage || isBloggsPage || isNetworkPage) {
+
+  const isHomePage = location.pathname === "/home";
+
+  if (isHomePage) {
+    logoStyle.width = "30%";
+  } else {
     logoStyle.width = "40%";
   }
-  const postButtonStyle = {
-    backgroundColor: "#8D88EA",
-    color: "white",
-    fontSize: "20px",
-    padding: "10px 120px",
-    marginRight: "auto",
-  };
-  const modalContainerStyle = {
-    backgroundColor: "#F8F9FA",
-  };
-  const submitButtonStyle = {
-    backgroundColor: "black",
-    color: "white",
-  };
+
   return (
     <div>
       <Navbar expand="lg" bg="light" variant="light" style={{ display: "flex", justifyContent: "space-between" }}>
-        <Navbar.Brand as={NavLink} to="/">
+        <Navbar.Brand onClick={handleLogoClick}>
           <Image style={logoStyle} src="/rocketElevators/codebloggs logo2.png" alt="Logo" />
         </Navbar.Brand>
         {!(location.pathname === "/" || location.pathname === "/create") && (
@@ -117,7 +143,7 @@ export default function MyNavbar(props) {
               {agentName} <i className="fas fa-caret-down"></i>
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={handleAccountSettings}>Account Settings</Dropdown.Item> {/* Handle Account Settings click */}
+              <Dropdown.Item onClick={handleAccountSettings}>Account Settings</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
@@ -136,6 +162,25 @@ export default function MyNavbar(props) {
             </Button>
             <Button variant="primary" onClick={handleSubmitPost} style={submitButtonStyle}>
               Submit Post
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* Account Settings Modal */}
+        <Modal show={showAccountSettingsModal} onHide={handleAccountSettingsClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Account Settings</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Here you can update your account settings!</p>
+            {/* Add your account settings form or options here */}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleAccountSettingsClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleSaveChanges}>
+              Save Changes
             </Button>
           </Modal.Footer>
         </Modal>
